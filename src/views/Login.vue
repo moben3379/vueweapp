@@ -1,11 +1,21 @@
 <template>
-  <div class="login">
-    <div class="content">
-      <lable for="username">用户名:</lable><input type="text" id="username" v-model="loginForm.username">
-      <br><br><br><br>
-      <lable for="password">用户名:</lable><input type="text" id="password" v-model="loginForm.password">
-      <br><br><br><br>
-      <button @click="login">登录</button>
+  <div>
+    <div class="background" >
+      <img src="../images/background.jpg" alt="">
+    </div>
+    <div class="login-box" >
+      <div class="content">
+        <i class="fa fa-user"></i><input type="username" id="username" placeholder="用户名" v-model="loginForm.username">
+        <br>
+        <i class="fa fa-key"></i><input type="password" id="password" placeholder="密码" v-model="loginForm.password">
+        <button @click="login" id="login-bt">登录</button>
+      </div>
+      <div class="choose">
+        <input type="checkbox" class="box">
+        <span>记住密码</span>
+        <span><a href="#">注册</a></span>
+        <span>忘记密码?<a href="#">立即找回</a></span>
+      </div>
     </div>
   </div>
 </template>
@@ -19,7 +29,13 @@ export default {
       loginForm: {
         username: 'liwei',
         password: 'lw1234'
-      }
+      },
+      //设置登录页面背景图片
+      /*background:{
+        backgroundImage:"url("+require("../images/background.jpg")+")",
+        backgroundRepeat:"no-repeat",
+        backgroundSize:"100% 100%"
+      }*/
     }
   },
   methods: {
@@ -29,7 +45,7 @@ export default {
 
       this.$api.login.login("/login", this.loginForm)
           .then(res => {
-
+            console.log("当前登录用户：",res);
             // vuex（状态管理）
             sessionStorage.setItem("token", res.token);
             // 跳转到页面之前要调用后台的菜单接口，获取当前用户的菜单
@@ -71,20 +87,66 @@ export default {
 </script>
 
 <style scoped>
-.login{
+
+#username,#password{
+  width: 200px;
+  height: 30px;
+  margin-top: 45px;
+  margin-left: 15px;
+  border-radius: 10px;
+  outline-style: none ;
+  border: 1px solid #ccc;
+}
+
+#login-bt{
+  width: 200px;
+  height: 40px;
+  margin-top: 50px;
+  background-color:rgb(92,125,166);
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 18px;
+  outline-style: none ;
+  border: 1px solid #ccc;
+}
+
+#login-bt:hover{
+  background-color: rgb(72,114,156);
+}
+
+.background{
+  position: absolute;
+  background-size: 100% 100%;
+}
+
+.login-box{
+  position: absolute;
   text-align: center;
-  width: 450px;
-  height: 400px;
-  border-radius: 20px;
-  margin: auto;
-  position: relative;
-  top: 200px;
-  background-color: aqua;
+  width: 350px;
+  height: 350px;
+  background-color:rgba(255,255,255,0.3);
+  margin: 150px 0 0 550px;
+  border-radius: 10px;
 }
-.content{
-  position: relative;
-  top: 100px;
-  background-color: cadetblue;
+
+.choose{
+  margin-top: 25px;
+  float: left;
+  font-size: small;
+  margin-left: 25px;
+  padding-left: 25px;
 }
+.choose>span{
+  margin-right: 15px;
+}
+.choose a{
+  text-decoration: none;
+  color: black;
+}
+.choose :hover a{
+  color: blue;
+}
+
+
 
 </style>

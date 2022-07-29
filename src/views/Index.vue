@@ -20,8 +20,8 @@ export default {
 </script>
 
 <style scoped>
-  .index{
-    width: 1000px;
-    height: 800px;
-  }
+.index{
+  width: 100%;
+  height: 800px;
+}
 </style>

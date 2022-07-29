@@ -50,17 +50,16 @@ export default {
 
 <style scoped>
 
-/* clear screen */
-*{
-  margin: 0;
-  padding: 0;
+.sidebar {
+  width: 15%;
+  height: 90%;
+  float: left;
+  background-color: aqua;
 }
 
-.sidebar {
-  width: 150px;
-  height: 90%;
-  background-color: cadetblue;
-  float: left;
+* {
+  margin: 0;
+  padding: 0;
 }
 
 li {
@@ -78,7 +77,7 @@ li {
 
 a {
   display: block;
-  width: 100%;
+  width: 189px;
   height: 36px;
   color: #5d5d5d;
   text-decoration: none;
@@ -94,7 +93,16 @@ a {
   font-style: normal;
 }
 
- .submenu {
+/*.submenuHide {
+  display: none;
+  position: relative;
+}
+
+.submenuShow {
+  display: block;
+  position: relative;
+}*/
+.submenu{
   position: relative;
 }
 
@@ -121,5 +129,6 @@ a {
   border: 1px dotted;
   border-width: 1px 0 0; /* 上 右 下*/
 }
+
 
 </style>

@@ -11,11 +11,10 @@ export default {
 </script>
 
 <style scoped>
-  .main{
-    width: 850px;
-    height: 90%;
-
-    background-color: aliceblue;
-    float: left;
-  }
+.main{
+  width: 85%;
+  height: 90%;
+  float: left;
+  background-color: blue;
+}
 </style>

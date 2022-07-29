@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="background" >
-      <img src="../images/background.jpg" alt="">
+<!--      <img src="../images/background.jpg" alt="">-->
     </div>
     <div class="login-box" >
       <div class="content">
@@ -115,8 +115,13 @@ export default {
 }
 
 .background{
-  position: absolute;
-  background-size: 100% 100%;
+  background: url("../images/background.jpg");
+  position:fixed;
+  background-size:100% 100%;
+  width: 1520px;
+  height: 800px;
+  /*position: absolute;*/
+  /*background-size: 100% 100%;*/
 }
 
 .login-box{

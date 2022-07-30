@@ -4,6 +4,7 @@ import Main from "@/views/Main";
 import Role from "@/views/Role";
 import MainContent from "@/views/MainContent";
 import {createRouter, createWebHistory} from "vue-router";
+import OrderList from "@/views/OrderList";
 
 const Index = () => import('../views/Index')
 /*
@@ -48,6 +49,14 @@ const routes = [
                             name: '用户'
                         },
                         component: User
+                    },
+                    {
+                        path: 'orderList',
+                        name: 'OrderList',
+                        meta: {
+                            name: '订单列表'
+                        },
+                        component: OrderList
                     },
                     {
                         path: 'role',

@@ -5,9 +5,9 @@
     </div>
     <div class="login-box" >
       <div class="content">
-        <i class="fa fa-user"></i><input type="username" id="username" placeholder="用户名" v-model="loginForm.username">
+        <i class="fa fa-user"></i><input type="text" id="username" placeholder="用户名" v-model="loginForm.username">
         <br>
-        <i class="fa fa-key"></i><input type="password" id="password" placeholder="密码" v-model="loginForm.password">
+        <i class="fa fa-key"></i><input type="text" id="password" placeholder="密码" v-model="loginForm.password">
         <button @click="login" id="login-bt">登录</button>
       </div>
       <div class="choose">
@@ -47,6 +47,7 @@ export default {
           .then(res => {
             console.log("当前登录用户：",res);
             // vuex（状态管理）
+            sessionStorage.setItem("user",res.name);
             sessionStorage.setItem("token", res.token);
             // 跳转到页面之前要调用后台的菜单接口，获取当前用户的菜单
             // 再次发请求，但是发请求之前，要带上token
@@ -86,8 +87,11 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style >
+* {
+  margin: 0;
+  padding: 0;
+}
 #username,#password{
   width: 200px;
   height: 30px;
@@ -116,12 +120,11 @@ export default {
 
 .background{
   background: url("../images/background.jpg");
-  position:fixed;
-  background-size:100% 100%;
-  width: 1520px;
-  height: 800px;
-  /*position: absolute;*/
-  /*background-size: 100% 100%;*/
+
+  position: fixed;
+  width: 100%;
+  height: 100%;
+
 }
 
 .login-box{
@@ -130,7 +133,7 @@ export default {
   width: 350px;
   height: 350px;
   background-color:rgba(255,255,255,0.3);
-  margin: 150px 0 0 550px;
+  margin: 150px 0 0 590px;
   border-radius: 10px;
 }
 

@@ -19,7 +19,11 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+*{
+  margin: 0;
+  padding: 0;
+}
 .index{
   width: 100%;
   height: 800px;

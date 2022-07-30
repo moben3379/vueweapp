@@ -53,7 +53,7 @@ export default {
   width: 15%;
   height: 90%;
   float: left;
-  background-color: aqua;
+  background-color: #569dfa;
 }
 
 * {

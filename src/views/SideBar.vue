@@ -35,9 +35,8 @@ export default {
       let tree = this.$store.getters.getNavTree;
       for (var i=0;i<tree.length;i++){
         tree[i].display=false;
-        console.log(tree[i].url);
       }
-      console.log(tree)
+      console.log("tree:",tree)
       return tree;
     }
 

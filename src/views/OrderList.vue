@@ -79,7 +79,7 @@ export default {
         this.searchBack = res;
         console.log(this.searchBack);
       })
-
+    },
     getTotalPrice(index){
       let totalPrice=this.OrderList[index].menu_price*this.OrderList[index].menu_quantity;
       return totalPrice;

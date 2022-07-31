@@ -52,7 +52,7 @@ const routes = [
                         meta: {
                             name: '用户'
                         },
-                        component: User
+                        component: User,
                     },
                     {
                         path: 'orderList',

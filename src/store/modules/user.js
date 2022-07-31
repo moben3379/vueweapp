@@ -3,7 +3,8 @@ export default {
     state: {
         // 全局属性
         // 如果没有模块化，很多模块的属性，都在这里声明
-        perms: []
+        perms: [],
+       /* list:[]*/
     },
     // 同步操作赋值
     mutations: {
@@ -11,7 +12,11 @@ export default {
         setPerms(state, perms) {
             state.perms = perms;
             console.log("给perms赋值：", perms)
-        }
+        },
+        /*setList(state, list) {
+            state.list = list;
+            console.log("获取用户列表：", list)
+        },*/
     },
     actions: {
         /*
@@ -20,11 +25,17 @@ export default {
          */
         setPerms(ctx,payload){
             ctx.commit(payload.type,payload.data);//调用mutation的setNavTree
-        }
+        },
+        /*setList(ctx,payload){
+            ctx.commit(payload.type,payload.data);
+        }*/
     },
     getters: {
         getPerms(state) {
             return state.perms
-        }
+        },
+        /*getList(state) {
+            return state.list
+        }*/
     },
 }

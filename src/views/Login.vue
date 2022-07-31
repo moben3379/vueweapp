@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div >
     <div class="background" >
 <!--      <img src="../images/background.jpg" alt="">-->
     </div>
@@ -74,9 +74,10 @@ export default {
               this.$api.user.findPermissions("user/findPermissions",{'name':res})
               .then(res=>{
                 console.log(this.loginForm.username+"的权限："+res);
-                this.$store.commit('serPerms',res);
+                this.$store.commit('setPerms',res);
               })
             })
+
             this.$router.push("/index");
           }).catch(err => {
         console.log(err);
@@ -120,10 +121,11 @@ export default {
 
 .background{
   background: url("../images/background.jpg");
-
   position: fixed;
   width: 100%;
   height: 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
 
 }
 
@@ -133,8 +135,12 @@ export default {
   width: 350px;
   height: 350px;
   background-color:rgba(255,255,255,0.3);
-  margin: 150px 0 0 590px;
+ /* margin: 150px 0 0 590px;*/
   border-radius: 10px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
 }
 
 .choose{

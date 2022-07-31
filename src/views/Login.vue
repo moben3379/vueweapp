@@ -120,7 +120,7 @@ export default {
 
 .background{
   background: url("../images/background.jpg");
-
+  background-repeat: no-repeat;
   position: fixed;
   width: 100%;
   height: 100%;

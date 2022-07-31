@@ -12,7 +12,7 @@ const store = createStore({
         name: 'navTree',
         local: {
             navTree:["menu.navTree"]
-        }
+        },
     })]
 })
 export default store

@@ -15,6 +15,5 @@ export default {
   width: 85%;
   height: 90%;
   float: left;
-  background-color: blue;
 }
 </style>

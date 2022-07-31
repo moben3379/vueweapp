@@ -1,14 +1,13 @@
 <template>
 
 <div>
-  orderList
-  <button @click="getOrderList">点击</button>
   <input type="text" id="search" placeholder="查询订单" v-model="searchList">
   <button @click="searchOrderList()">查询订单</button>
+  <button v-if="isShowSearchTable" @click="returnInitPage()">返回</button>
 </div>
 
 
-<table>
+<table v-if="!isShowSearchTable">
   <caption>订单列表</caption>
   <tr>
     <th><input type="checkbox"></th>
@@ -44,6 +43,42 @@
   </tr>
 </table>
 
+  <table v-if="isShowSearchTable">
+    <caption>订单列表</caption>
+    <tr>
+      <th><input type="checkbox"></th>
+      <th style="width: 120px">买家ID</th>
+      <th style="width: 80px">买家昵称</th>
+      <th style="width: 120px">电话</th>
+      <th style="width: 200px">地址</th>
+      <th style="width: 300px">订单时间</th>
+      <th style="width: 80px">单价</th>
+      <th style="width: 50px">数量</th>
+      <th style="width: 80px">总价</th>
+      <th style="width: 80px">订单状态</th>
+      <th style="width: 150px;border:1px;">操作</th>
+    </tr>
+    <tr v-for="(searchOrder,index) in searchBack" :key="searchOrder.id">
+      <td><input type="checkbox"></td>
+      <td>{{searchOrder.buyer_openid}}</td>
+      <td>{{searchOrder.buyer_name}}</td>
+      <td>{{searchOrder.buyer_phone}}</td>
+      <td>{{searchOrder.buyer_address}}</td>
+      <td>{{searchOrder.create_time}}</td>
+      <td>{{searchOrder.menu_price}}</td>
+      <td>{{searchOrder.menu_quantity}}</td>
+      <td>{{getTotalPrice(index)}}</td>
+      <td v-if="searchOrder.order_status==0">未处理</td>
+      <td v-if="searchOrder.order_status==1">已处理</td>
+      <td style="border:1px;">
+        <a href="#" @click.prevent="cheangeOrderStatus(index)" v-if="searchOrder.order_status==0">已完成订单</a>
+        <a href="#" v-if="searchOrder.order_status==1" @click.prevent="deleteOrder(searchOrder.order_id)">删除</a>
+        &nbsp;
+        <a href="#" @click.prevent="cheangeOrderStatus(index)" v-if="searchOrder.order_status==1">撤回</a>
+      </td>
+    </tr>
+  </table>
+
 </template>
 
 <script>
@@ -54,9 +89,10 @@ export default {
     return {
 
       searchList:"",
-      searchBack:"",
+      searchBack:[],
 
-      OrderList:[]
+      isShowSearchTable:false,
+      OrderList:[],
 
     }
   },
@@ -65,7 +101,6 @@ export default {
     getOrderList(){
       this.$api.orderList.orderList("/getOrderList")
           .then(res=>{
-            console.log(res);
             this.OrderList=res;
             console.log(this.OrderList);
           })
@@ -73,12 +108,18 @@ export default {
 
 
     /*订单查询*/
-    searchOrderList(){
-      this.$api.orderList.searchOrderList("/searchOrderList",this.searchList)
-      .then(res=>{
-        this.searchBack = res;
-        console.log(this.searchBack);
-      })
+    searchOrderList() {
+      this.$api.orderList.searchOrderList("/searchOrderList", this.searchList)
+          .then(res => {
+            this.searchBack = res;
+            this.isShowSearchTable=true;
+            console.log(this.searchBack);
+          })
+    },
+
+    returnInitPage(){
+      this.isShowSearchTable=false;
+    },
 
     getTotalPrice(index){
       let totalPrice=this.OrderList[index].menu_price*this.OrderList[index].menu_quantity;

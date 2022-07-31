@@ -6,6 +6,8 @@ export function orderList(url,params){
 
 
 export function deleteOrderByOrderId(url,params){
+    return axios.post(url,params);
+}
 
 export function searchOrderList(url,params){
 

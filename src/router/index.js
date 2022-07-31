@@ -5,6 +5,11 @@ import Role from "@/views/Role";
 import MainContent from "@/views/MainContent";
 import {createRouter, createWebHistory} from "vue-router";
 
+import FoodMenu from "@/views/FoodMenu";
+
+import OrderList from "@/views/OrderList";
+
+
 const Index = () => import('../views/Index')
 /*
 创建路由表
@@ -50,6 +55,14 @@ const routes = [
                         component: User,
                     },
                     {
+                        path: 'orderList',
+                        name: 'OrderList',
+                        meta: {
+                            name: '订单列表'
+                        },
+                        component: OrderList
+                    },
+                    {
                         path: 'role',
                         name: 'Role',
                         meta: {
@@ -57,6 +70,15 @@ const routes = [
                         },
                         component: Role
                     },
+                    {
+                        path: 'foodMenu',
+                        name: 'Menu',
+                        meta: {
+                            name: '菜单'
+                        },
+                        component: FoodMenu
+                    },
+
                 ]
             }
         ]

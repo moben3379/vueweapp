@@ -1,13 +1,12 @@
 <template>
   <div>
-    role
-    <button @click="$router.back()">返回</button>
+    角色信息
   </div>
 </template>
 
 <script>
 export default {
-  name: "RolePage"
+  name: "MenuPage"
 }
 </script>
 

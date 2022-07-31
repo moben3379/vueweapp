@@ -121,6 +121,8 @@ export default {
 
 .background{
   background: url("../images/background.jpg");
+
+
   position: fixed;
   width: 100%;
   height: 100%;

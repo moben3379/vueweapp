@@ -28,7 +28,7 @@
     <td v-if="order.order_status==1">已处理</td>
     <td style="border:1px;">
       <a href="#" @click.prevent="cheangeOrderStatus(index)" v-if="order.order_status==0">已完成订单</a>
-      <a href="#" v-if="order.order_status==1">删除</a>
+      <a href="#" v-if="order.order_status==1" @click.prevent="deleteOrder(order.order_id)">删除</a>
       &nbsp;
       <a href="#" @click.prevent="cheangeOrderStatus(index)" v-if="order.order_status==1">撤回</a>
     </td>
@@ -58,12 +58,24 @@ export default {
       return totalPrice;
     },
     cheangeOrderStatus(index){
-      if (this.OrderList[index].order_status==0){
+      if (this.OrderList[index].order_status===0){
         this.OrderList[index].order_status=1;
       }else {
         this.OrderList[index].order_status=0;
       }
 
+    },
+    deleteOrder(id){
+      console.log(id)
+      this.$api.orderList.deleteOrderByOrderId("/deleteOrderByOrderId",id)
+      .then(res=>{
+        if (res==0){
+          alert("删除失败")
+        }else {
+          alert("删除成功");
+          location.reload();
+        }
+      })
     }
   },
   mounted() {

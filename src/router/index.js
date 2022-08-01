@@ -8,6 +8,7 @@ import {createRouter, createWebHistory} from "vue-router";
 // import FoodMenu from "@/views/FoodMenu";
 
 import OrderList from "@/views/OrderList";
+import FoodMenu from "@/views/FoodMenu";
 
 
 const Index = () => import('../views/Index')
@@ -70,14 +71,14 @@ const routes = [
                         },
                         component: Role
                     },
-                    // {
-                    //     path: 'foodMenu',
-                    //     name: 'Menu',
-                    //     meta: {
-                    //         name: '菜单'
-                    //     },
-                    //     component: FoodMenu
-                    // },
+                    {
+                        path: 'foodMenu',
+                        name: 'Menu',
+                        meta: {
+                            name: '菜单'
+                        },
+                        component: FoodMenu
+                    },
 
                 ]
             }

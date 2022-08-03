@@ -5,7 +5,6 @@
     <button  >新增菜单</button>
     <br/>
 
-
     <table>
       <tr>
         <th>菜单编号</th>
@@ -66,8 +65,15 @@ export default {
         bg:false,
         hidebg:false
       },
-
     }
+  },
+  mounted() {
+      //  向后台发送请求，获取食物菜单信息，建立menu.js在modiles里
+      this.$api.foodmenu.findMenuInformation("getmenu/findMenuInformation")
+          .then(res=>{
+            console.log("获取菜单信息有：",res)
+            sessionStorage.setItem("res",JSON.stringify(res))
+          })
   },
   //___________________________________________________________________________________________
   methods:{
@@ -78,7 +84,6 @@ export default {
       .then(res=>{
         console.log("获取菜单信息有：",res)
         sessionStorage.setItem("res",JSON.stringify(res))
-        location.reload();
       })
     },
   //  修改菜单界面
@@ -114,6 +119,7 @@ export default {
       console.log(Id,Name,Price,Form,Count,Icon,Detail)
       this.$api.foodmenu.alterMenuInformation("getmenu/alterMenuInformation",{'Id':Id,'Name':Name,'Price':Price,'Form':Form,'Count':Count,'Icon':Icon,'Detail':Detail})
       // this.$api.foodmenu.alterMenuInformation("getmenu/alterMenuInformation",JSON.stringify(this.FoodMenu))
+      this.getMenuInformation(),
       this.hidebg()
 
     },

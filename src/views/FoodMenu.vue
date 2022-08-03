@@ -1,21 +1,15 @@
 <template>
-  <div>
+<div>
 
-
-  </div>
+</div>
 </template>
 
 <script>
-
-
 export default {
-  name: "UserPage",
-
-
+  name: "FoodMenu"
 }
 </script>
 
 <style scoped>
-
 
 </style>

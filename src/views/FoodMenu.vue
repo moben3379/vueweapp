@@ -121,6 +121,7 @@ export default {
       // this.$api.foodmenu.alterMenuInformation("getmenu/alterMenuInformation",JSON.stringify(this.FoodMenu))
       this.getMenuInformation(),
       this.hidebg()
+
     },
 
 

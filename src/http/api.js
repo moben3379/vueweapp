@@ -7,7 +7,7 @@ import * as orderList from "@/http/modules/orderList";
 
 import * as user from "@/http/modules/user";
 import * as foodmenu from "@/http/modules/foodmenu";
-import {orderList} from "@/http/modules/orderList";
+// import {orderList} from "@/http/modules/orderList";
 // import * as userList from "@/http/modules/userList"
 
 export default {

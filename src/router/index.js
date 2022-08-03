@@ -1,5 +1,5 @@
 import Login from "@/views/Login";
-import User from "@/views/User";
+import UserList from "@/views/UserList";
 import Main from "@/views/Main";
 import Role from "@/views/Role";
 import MainContent from "@/views/MainContent";
@@ -48,12 +48,12 @@ const routes = [
                         component: Main
                     },
                     {
-                        path: 'user',
-                        name: 'User',
+                        path: 'userList',
+                        name: 'UserList',
                         meta: {
-                            name: '用户'
+                            name: '用户列表'
                         },
-                        component: User,
+                        component: UserList
                     },
                     {
                         path: 'orderList',

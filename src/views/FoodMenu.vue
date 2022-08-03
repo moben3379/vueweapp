@@ -1,4 +1,19 @@
 <template>
+
+<div>
+
+</div>
+</template>
+
+<script>
+export default {
+  name: "FoodMenu"
+}
+</script>
+
+<style scoped>
+
+
   <div>
     <br/>
     <button  @click="getMenuInformation">查询菜单</button>&nbsp;&nbsp;&nbsp;
@@ -216,4 +231,5 @@ export default {
       position:relative;
       left: 30%;
     }
+
 </style>

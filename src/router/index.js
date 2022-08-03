@@ -5,9 +5,10 @@ import Role from "@/views/Role";
 import MainContent from "@/views/MainContent";
 import {createRouter, createWebHistory} from "vue-router";
 
-import FoodMenu from "@/views/FoodMenu";
+// import FoodMenu from "@/views/FoodMenu";
 
 import OrderList from "@/views/OrderList";
+import FoodMenu from "@/views/FoodMenu";
 
 
 const Index = () => import('../views/Index')

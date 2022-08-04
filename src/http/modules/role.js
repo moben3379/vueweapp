@@ -1,5 +1,5 @@
-import {get} from '@/http/axios'
+import * as axios from "@/http/axios";
 
-export function findAll(url, params) {
-    return get(url, params);
+export function findAll(url) {
+    return axios.get(url);
 }

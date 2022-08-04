@@ -1,10 +1,13 @@
 import Login from "@/views/Login";
-import User from "@/views/User";
+import UserList from "@/views/UserList";
 import Main from "@/views/Main";
 import Role from "@/views/Role";
 import MainContent from "@/views/MainContent";
 import {createRouter, createWebHistory} from "vue-router";
 import SystemMenu from "@/views/SystemMenu";
+import OrderList from "@/views/OrderList";
+import FoodMenu from "@/views/FoodMenu";
+
 
 const Index = () => import('../views/Index')
 /*
@@ -43,12 +46,22 @@ const routes = [
                         component: Main
                     },
                     {
-                        path: 'user',
-                        name: 'User',
+                        path: 'userList',
+                        name: 'UserList',
                         meta: {
-                            name: '用户'
+                            name: '用户列表'
                         },
-                        component: User
+
+                        component: UserList
+                    },
+                    {
+                        path: 'orderList',
+                        name: 'OrderList',
+                        meta: {
+                            name: '订单列表'
+                        },
+                        component: OrderList
+
                     },
                     {
                         path: 'role',
@@ -59,6 +72,7 @@ const routes = [
                         component: Role
                     },
                     {
+
                         path: 'systemMenu',
                         name: 'SystemMenu',
                         meta: {
@@ -66,6 +80,15 @@ const routes = [
                         },
                         component: SystemMenu
                     },
+                    {
+                        path: 'foodMenu',
+                        name: 'Menu',
+                        meta: {
+                            name: '菜单'
+                        },
+                        component: FoodMenu
+                    },
+
                 ]
             }
         ]

@@ -4,7 +4,8 @@
     <br/>
     <input type="text" class="input"  v-model="searchList" >
     <button  @click="searchMenu()">查询菜单</button>&nbsp;&nbsp;&nbsp;
-    <button  >新增菜单</button>
+    <button  @click="addMenuInformation">新增菜单</button>
+
     <br/>
 
     <table v-if="!isShowSearchTable">
@@ -26,11 +27,16 @@
         <td> {{food.menu_Count }}</td>
         <td> {{ food.menu_Icon }}</td>
         <td> {{ food.menu_detail }}</td>
-        <td > <button  class="delect">删除</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button  @click="AlterInterfaceShow(index)"  class="alter">修改</button></td>
+        <td>
+          <button @click="deleteMenu(food.menu_Id)"  class="delete">删除</button>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <button @click="AlterInterfaceShow(index)" class="alter">修改</button>
+        </td>
       </tr>
     </table>
+  </div>
 
-<!--      这里是新增与修改共享界面      -->
+<!--      这里是修改界面      -->
 <!--    class="showAlterAdd"-->
     <div class="bg" v-if="showBg.bg">
       <button class="close" @click="hidebg">X</button>
@@ -47,8 +53,9 @@
       <input :class="{showInput:true}" type="text" v-model="this.icon"  placeholder="上传图片"/>
       <input :class="{showInput:true}" type="text" v-model="this.detail" placeholder="详细描述"/>
       <button class="sure" @click="SureAlter">确定</button>
-
     </div>
+    
+    <div>
     <table v-if="isShowSearchTable">
       <tr>
         <th>菜单编号</th>
@@ -71,6 +78,27 @@
         <td > <button  class="delect">删除</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button  @click="AlterInterfaceShow(index)"  class="alter">修改</button></td>
       </tr>
     </table>
+  </div>
+
+
+  <!--      这里是新增界面      -->
+  <!--    class="showAlterAdd"-->
+  <div class="bg" v-if="showBg.bg">
+    <button class="close" @click="hidebg">X</button>
+    <input :class="{showInput:true}" type="text" v-model="this.Id" name="id" placeholder="菜品编号"/>
+    <input :class="{showInput:true}" type="text" v-model="this.Name" name="name" placeholder="菜品名称"/>
+    <input :class="{showInput:true}" type="text" v-model="this.Price"  placeholder="菜品价格"/>
+    <select :class="{showInput:true} " v-model="this.Form">
+      <option selected>好吃家常</option>
+      <option>营养套餐</option>
+      <option>请客大宴</option>
+      <option>美味小吃</option>
+    </select>
+    <input :class="{showInput:true}" type="text" v-model="this.Count" placeholder="数量"/>
+    <input :class="{showInput:true}" type="text" v-model="this.Icon"  placeholder="上传图片"/>
+    <input :class="{showInput:true}" type="text" v-model="this.Detail" placeholder="详细描述"/>
+    <button class="sure" @click="SureAdd">确定</button>
+
   </div>
 </template>
 
@@ -144,7 +172,44 @@ export default {
       this.hidebg()
       location.reload();
     },
+    // 删除菜品
+    deleteMenu(deleteid){
+      console.log(deleteid)
+      this.$api.foodmenu.deleteMenu("getmenu/deleteMenu",deleteid)
+          .then(res=>{
+            if (res==0){
+              alert("删除失败")
+            }else {
+              alert("确定要删除吗");
+              location.reload();
 
+            //  重新加载
+            }
+          })
+    },
+
+    //新增菜品
+    addMenuInformation(){
+      console.log("准备新增菜品！！！！！！！！！！");
+      this.showBg.bg=!this.showBg.bg;
+    },
+    SureAdd(){
+      console.log("确认新增！！！！！！！！！！！！");
+      let Id=this.Id
+      let Name=this.Name
+      let Price=this.Price
+      let Form=this.Form
+      let Count=this.Count
+      let Icon=this.Icon
+      let Detail=this.Detail
+      console.log(Id,Name,Price,Form,Count,Icon,Detail)
+      this.$api.foodmenu.addMenuInformation("getmenu/addMenuInformation",{'Id':Id,'Name':Name,'Price':Price,'Form':Form,'Count':Count,'Icon':Icon,'Detail':Detail})
+          .then(res=>{
+            console.log("输出结果：",res);
+            this.hidebg();
+            location.reload();//刷新整个页面
+          })
+    }
 
     // 准确查询
     searchMenu(){
@@ -163,7 +228,10 @@ export default {
   //___________________________________________________________________________________________
   //存储信息
   computed: {
-
+    FoodMenu() {
+      let st= JSON.parse(sessionStorage.getItem("res"))
+      return st
+    }
   },
   //___________________________________________________________________________________________
 }
@@ -246,7 +314,7 @@ export default {
     td{
       border: 2px solid black;
     }
-    .alter,.delect{
+    .alter,.delete{
       position:relative;
       left: 30%;
     }

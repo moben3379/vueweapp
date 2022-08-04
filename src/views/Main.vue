@@ -7,9 +7,11 @@
 <script>
 
 export default {
+
   name: "MainPage",
   computed:{
   }
+
 }
 </script>
 

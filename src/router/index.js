@@ -4,7 +4,10 @@ import Main from "@/views/Main";
 import Role from "@/views/Role";
 import MainContent from "@/views/MainContent";
 import {createRouter, createWebHistory} from "vue-router";
+
 import SystemMenu from "@/views/SystemMenu";
+
+
 import OrderList from "@/views/OrderList";
 import FoodMenu from "@/views/FoodMenu";
 

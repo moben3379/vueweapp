@@ -1,11 +1,14 @@
 <template>
+
   <div>
     <br/>
-    <button  @click="getMenuInformation">查询菜单</button>&nbsp;&nbsp;&nbsp;
+    <input type="text" class="input"  v-model="searchList" >
+    <button  @click="searchMenu()">查询菜单</button>&nbsp;&nbsp;&nbsp;
     <button  @click="addMenuInformation">新增菜单</button>
+
     <br/>
 
-    <table>
+    <table v-if="!isShowSearchTable">
       <tr>
         <th>菜单编号</th>
         <th>菜品名称</th>
@@ -50,8 +53,33 @@
       <input :class="{showInput:true}" type="text" v-model="this.icon"  placeholder="上传图片"/>
       <input :class="{showInput:true}" type="text" v-model="this.detail" placeholder="详细描述"/>
       <button class="sure" @click="SureAlter">确定</button>
-
+    </div>
+    
+    <div>
+    <table v-if="isShowSearchTable">
+      <tr>
+        <th>菜单编号</th>
+        <th>菜品名称</th>
+        <th>菜品价格</th>
+        <th>菜品类别</th>
+        <th>菜品数量</th>
+        <th>菜品图片</th>
+        <th>菜品描述</th>
+        <th>操    作</th>
+      </tr>
+      <tr v-for="(food,index) in searchBack " :key="food.id">
+        <td><input type="checkbox"> {{ food.menu_Id }}</td>
+        <td> {{ food.menu_Name }}</td>
+        <td> {{ food.menu_Price }}</td>
+        <td> {{ food.menu_Form }}</td>
+        <td> {{food.menu_Count }}</td>
+        <td> {{ food.menu_Icon }}</td>
+        <td> {{ food.menu_detail }}</td>
+        <td > <button  class="delect">删除</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button  @click="AlterInterfaceShow(index)"  class="alter">修改</button></td>
+      </tr>
+    </table>
   </div>
+
 
   <!--      这里是新增界面      -->
   <!--    class="showAlterAdd"-->
@@ -70,10 +98,12 @@
     <input :class="{showInput:true}" type="text" v-model="this.Icon"  placeholder="上传图片"/>
     <input :class="{showInput:true}" type="text" v-model="this.Detail" placeholder="详细描述"/>
     <button class="sure" @click="SureAdd">确定</button>
+
   </div>
 </template>
 
 <script>
+
 
 export default {
 
@@ -81,12 +111,16 @@ export default {
   //___________________________________________________________________________________________
   data(){
     return{
-
+      FoodMenu:[],
+      searchList:'',
+      searchBack:[],
+      isShowSearchTable:false,
       //背景显示
       showBg: {
         bg:false,
         hidebg:false
       },
+
     }
   },
   mounted() {
@@ -94,20 +128,12 @@ export default {
       this.$api.foodmenu.findMenuInformation("getmenu/findMenuInformation")
           .then(res=>{
             console.log("获取菜单信息有：",res)
-            sessionStorage.setItem("res",JSON.stringify(res))
+            this.FoodMenu=res;
           })
   },
   //___________________________________________________________________________________________
   methods:{
-    //点击获取信息
-    getMenuInformation(){
-      //  向后台发送请求，获取食物菜单信息，建立menu.js在modiles里
-      this.$api.foodmenu.findMenuInformation("getmenu/findMenuInformation")
-      .then(res=>{
-        console.log("获取菜单信息有：",res)
-        sessionStorage.setItem("res",JSON.stringify(res))
-      })
-    },
+
   //  修改菜单界面
     AlterInterfaceShow(index){
       for(let i=0;i<this.FoodMenu.length;i++){
@@ -124,6 +150,7 @@ export default {
 
         }
       }
+
     },
     hidebg(){
       this.showBg.bg=!this.showBg.bg
@@ -141,8 +168,9 @@ export default {
       console.log(Id,Name,Price,Form,Count,Icon,Detail)
       this.$api.foodmenu.alterMenuInformation("getmenu/alterMenuInformation",{'Id':Id,'Name':Name,'Price':Price,'Form':Form,'Count':Count,'Icon':Icon,'Detail':Detail})
       // this.$api.foodmenu.alterMenuInformation("getmenu/alterMenuInformation",JSON.stringify(this.FoodMenu))
-      this.getMenuInformation(),
+      // this.getMenuInformation(),
       this.hidebg()
+      location.reload();
     },
     // 删除菜品
     deleteMenu(deleteid){
@@ -183,6 +211,19 @@ export default {
           })
     }
 
+    // 准确查询
+    searchMenu(){
+      this.$api.foodmenu.searchMenu("getmenu/searchMenu", this.searchList)
+          .then(res => {
+            this.searchBack = res;
+            console.log(res)
+            this.isShowSearchTable=true;
+            // console.log(this.searchBack);
+          })
+    },
+    returnInitPage(){
+      this.isShowSearchTable=false;
+    },
   },
   //___________________________________________________________________________________________
   //存储信息
@@ -206,7 +247,11 @@ export default {
       color: #ffffff;
       font-size: 15px;
     }
+.input{
+  position: relative;
+  left: 38%;
 
+}
     /****************新增与修改界面****************/
     .bg{
       position: absolute;

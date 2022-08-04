@@ -10,6 +10,10 @@ export function alterMenuInformation(url,params){
     return get(url,params);
 }
 
+export function addMenuInformation(url,params){
+    return get(url,params);
+}
+
 export function deleteMenu(url,params) {
     return axios.post(url,params);
 }

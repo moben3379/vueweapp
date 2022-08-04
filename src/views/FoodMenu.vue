@@ -39,7 +39,11 @@ export default {
         <td> {{food.menu_Count }}</td>
         <td> {{ food.menu_Icon }}</td>
         <td> {{ food.menu_detail }}</td>
-        <td > <button  class="delect">删除</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button  @click="AlterInterfaceShow(index)"  class="alter">修改</button></td>
+        <td>
+          <button @click="deleteMenu(food.menu_Id)"  class="delete">删除</button>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <button @click="AlterInterfaceShow(index)" class="alter">修改</button>
+        </td>
       </tr>
     </table>
 
@@ -136,10 +140,22 @@ export default {
       // this.$api.foodmenu.alterMenuInformation("getmenu/alterMenuInformation",JSON.stringify(this.FoodMenu))
       this.getMenuInformation(),
       this.hidebg()
-
     },
+    // 删除菜品
+    deleteMenu(deleteid){
+      console.log(deleteid)
+      this.$api.foodmenu.deleteMenu("getmenu/deleteMenu",deleteid)
+          .then(res=>{
+            if (res==0){
+              alert("删除失败")
+            }else {
+              alert("确定要删除吗");
+              location.reload();
 
-
+            //  重新加载
+            }
+          })
+    }
   },
   //___________________________________________________________________________________________
   //存储信息
@@ -148,7 +164,6 @@ export default {
       let st= JSON.parse(sessionStorage.getItem("res"))
       return st
     }
-
   },
   //___________________________________________________________________________________________
 }
@@ -227,7 +242,7 @@ export default {
     td{
       border: 2px solid black;
     }
-    .alter,.delect{
+    .alter,.delete{
       position:relative;
       left: 30%;
     }

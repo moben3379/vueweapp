@@ -1,23 +1,8 @@
 <template>
-
-<div>
-
-</div>
-</template>
-
-<script>
-export default {
-  name: "FoodMenu"
-}
-</script>
-
-<style scoped>
-
-
   <div>
     <br/>
     <button  @click="getMenuInformation">查询菜单</button>&nbsp;&nbsp;&nbsp;
-    <button  >新增菜单</button>
+    <button  @click="addMenuInformation">新增菜单</button>
     <br/>
 
     <table>
@@ -46,8 +31,9 @@ export default {
         </td>
       </tr>
     </table>
+  </div>
 
-<!--      这里是新增与修改共享界面      -->
+<!--      这里是修改界面      -->
 <!--    class="showAlterAdd"-->
     <div class="bg" v-if="showBg.bg">
       <button class="close" @click="hidebg">X</button>
@@ -65,8 +51,25 @@ export default {
       <input :class="{showInput:true}" type="text" v-model="this.detail" placeholder="详细描述"/>
       <button class="sure" @click="SureAlter">确定</button>
 
-    </div>
+  </div>
 
+  <!--      这里是新增界面      -->
+  <!--    class="showAlterAdd"-->
+  <div class="bg" v-if="showBg.bg">
+    <button class="close" @click="hidebg">X</button>
+    <input :class="{showInput:true}" type="text" v-model="this.Id" name="id" placeholder="菜品编号"/>
+    <input :class="{showInput:true}" type="text" v-model="this.Name" name="name" placeholder="菜品名称"/>
+    <input :class="{showInput:true}" type="text" v-model="this.Price"  placeholder="菜品价格"/>
+    <select :class="{showInput:true} " v-model="this.Form">
+      <option selected>好吃家常</option>
+      <option>营养套餐</option>
+      <option>请客大宴</option>
+      <option>美味小吃</option>
+    </select>
+    <input :class="{showInput:true}" type="text" v-model="this.Count" placeholder="数量"/>
+    <input :class="{showInput:true}" type="text" v-model="this.Icon"  placeholder="上传图片"/>
+    <input :class="{showInput:true}" type="text" v-model="this.Detail" placeholder="详细描述"/>
+    <button class="sure" @click="SureAdd">确定</button>
   </div>
 </template>
 
@@ -155,7 +158,31 @@ export default {
             //  重新加载
             }
           })
+    },
+
+    //新增菜品
+    addMenuInformation(){
+      console.log("准备新增菜品！！！！！！！！！！");
+      this.showBg.bg=!this.showBg.bg;
+    },
+    SureAdd(){
+      console.log("确认新增！！！！！！！！！！！！");
+      let Id=this.Id
+      let Name=this.Name
+      let Price=this.Price
+      let Form=this.Form
+      let Count=this.Count
+      let Icon=this.Icon
+      let Detail=this.Detail
+      console.log(Id,Name,Price,Form,Count,Icon,Detail)
+      this.$api.foodmenu.addMenuInformation("getmenu/addMenuInformation",{'Id':Id,'Name':Name,'Price':Price,'Form':Form,'Count':Count,'Icon':Icon,'Detail':Detail})
+          .then(res=>{
+            console.log("输出结果：",res);
+            this.hidebg();
+            location.reload();//刷新整个页面
+          })
     }
+
   },
   //___________________________________________________________________________________________
   //存储信息

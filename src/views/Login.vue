@@ -47,6 +47,7 @@ export default {
           .then(res => {
             console.log("当前登录用户：",res);
             // vuex（状态管理）
+            console.log("用户token:",res.token);
             sessionStorage.setItem("user",res.name);
             sessionStorage.setItem("token", res.token);
             // 跳转到页面之前要调用后台的菜单接口，获取当前用户的菜单

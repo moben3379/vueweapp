@@ -59,7 +59,7 @@ export default {
   //___________________________________________________________________________________________
   data(){
     return{
-
+      FoodMenu:'',
       //背景显示
       showBg: {
         bg:false,
@@ -69,20 +69,23 @@ export default {
   },
   mounted() {
       //  向后台发送请求，获取食物菜单信息，建立menu.js在modiles里
-      this.$api.foodmenu.findMenuInformation("getmenu/findMenuInformation")
+      this.$api.foodmenu.findMenuInformation("findMenuInformation")
           .then(res=>{
             console.log("获取菜单信息有：",res)
-            sessionStorage.setItem("res",JSON.stringify(res))
+            // sessionStorage.setItem("res",JSON.stringify(res))
+            this.FoodMenu=res
           })
+
   },
   //___________________________________________________________________________________________
   methods:{
     //点击获取信息
     getMenuInformation(){
       //  向后台发送请求，获取食物菜单信息，建立menu.js在modiles里
-      this.$api.foodmenu.findMenuInformation("getmenu/findMenuInformation")
+      this.$api.foodmenu.findMenuInformation("findMenuInformation")
       .then(res=>{
         console.log("获取菜单信息有：",res)
+
         sessionStorage.setItem("res",JSON.stringify(res))
       })
     },
@@ -117,22 +120,13 @@ export default {
           let Icon=this.icon
           let Detail=this.detail
       console.log(Id,Name,Price,Form,Count,Icon,Detail)
-      this.$api.foodmenu.alterMenuInformation("getmenu/alterMenuInformation",{'Id':Id,'Name':Name,'Price':Price,'Form':Form,'Count':Count,'Icon':Icon,'Detail':Detail})
+      this.$api.foodmenu.alterMenuInformation("alterMenuInformation",{'Id':Id,'Name':Name,'Price':Price,'Form':Form,'Count':Count,'Icon':Icon,'Detail':Detail})
       // this.$api.foodmenu.alterMenuInformation("getmenu/alterMenuInformation",JSON.stringify(this.FoodMenu))
       this.getMenuInformation(),
       this.hidebg()
 
     },
 
-
-  },
-  //___________________________________________________________________________________________
-  //存储信息
-  computed: {
-    FoodMenu() {
-      let st= JSON.parse(sessionStorage.getItem("res"))
-      return st
-    }
 
   },
   //___________________________________________________________________________________________

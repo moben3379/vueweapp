@@ -219,7 +219,7 @@ export default {
             this.hidebg();
             location.reload();//刷新整个页面
           })
-    }
+    },
 
     // 准确查询
     searchMenu(){
@@ -235,15 +235,6 @@ export default {
       this.isShowSearchTable=false;
     },
   },
-  //___________________________________________________________________________________________
-  //存储信息
-  computed: {
-    FoodMenu() {
-      let st= JSON.parse(sessionStorage.getItem("res"))
-      return st
-    }
-  },
-  //___________________________________________________________________________________________
 }
 
 </script>

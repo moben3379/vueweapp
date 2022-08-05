@@ -1,19 +1,4 @@
 <template>
-
-<div>
-
-</div>
-</template>
-
-<script>
-export default {
-  name: "FoodMenu"
-}
-</script>
-
-<style scoped>
-
-
   <div>
     <br/>
     <button  @click="getMenuInformation">查询菜单</button>&nbsp;&nbsp;&nbsp;
@@ -45,22 +30,27 @@ export default {
 
 <!--      这里是新增与修改共享界面      -->
 <!--    class="showAlterAdd"-->
-    <div class="bg" v-if="showBg.bg">
-      <button class="close" @click="hidebg">X</button>
-      <input :class="{showInput:true}" type="text" v-model="this.id" name="id" placeholder="菜品编号"/>
-      <input :class="{showInput:true}" type="text" v-model="this.name" name="name" placeholder="菜品名称"/>
-      <input :class="{showInput:true}" type="text" v-model="this.price"  placeholder="菜品价格"/>
-      <select :class="{showInput:true} " v-model="this.form">
-        <option selected>好吃家常</option>
-        <option>营养套餐</option>
-        <option>请客大宴</option>
-        <option>美味小吃</option>
-      </select>
-      <input :class="{showInput:true}" type="text" v-model="this.count" placeholder="数量"/>
-      <input :class="{showInput:true}" type="text" v-model="this.icon"  placeholder="上传图片"/>
-      <input :class="{showInput:true}" type="text" v-model="this.detail" placeholder="详细描述"/>
-      <button class="sure" @click="SureAlter">确定</button>
-
+    <div class="editdialog" v-if="showBg.bg">
+      <div class="editBox">
+        <div class="edit">
+          <!--      <button class="close" @click="hidebg">X</button>-->
+          <label>菜单编号：</label><input :class="{showInput:true}" type="text" v-model="this.id" name="id" placeholder="菜品编号"/><br>
+          <label>菜品名称：</label><input :class="{showInput:true}" type="text" v-model="this.name" name="name" placeholder="菜品名称"/><br>
+          <label>菜品价格：</label><input :class="{showInput:true}" type="text" v-model="this.price"  placeholder="菜品价格"/><br>
+          <label>菜品类别：</label>
+          <select :class="{showInput:true} " v-model="this.form">
+            <option selected>好吃家常</option>
+            <option>营养套餐</option>
+            <option>请客大宴</option>
+            <option>美味小吃</option>
+          </select><br>
+          <label>菜品数量：</label><input :class="{showInput:true}" type="text" v-model="this.count" placeholder="数量"/><br>
+          <label>菜品图片：</label><input :class="{showInput:true}" type="text" v-model="this.icon"  placeholder="上传图片"/><br>
+          <label>菜品描述：</label><input :class="{showInput:true}" type="text" v-model="this.detail" placeholder="详细描述"/><br>
+          <button class="sure" @click="SureAlter">确定</button>
+          <button class="close" @click="hidebg">取消</button>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -71,6 +61,7 @@ export default {
 export default {
 
   name: "FoodMenuPage",
+
   //___________________________________________________________________________________________
   data(){
     return{
@@ -134,8 +125,10 @@ export default {
       console.log(Id,Name,Price,Form,Count,Icon,Detail)
       this.$api.foodmenu.alterMenuInformation("getmenu/alterMenuInformation",{'Id':Id,'Name':Name,'Price':Price,'Form':Form,'Count':Count,'Icon':Icon,'Detail':Detail})
       // this.$api.foodmenu.alterMenuInformation("getmenu/alterMenuInformation",JSON.stringify(this.FoodMenu))
-      this.getMenuInformation(),
+
+      this.getMenuInformation()
       this.hidebg()
+
 
     },
 
@@ -156,80 +149,80 @@ export default {
 </script>
 
 <style scoped>
-    div>button{
-      position:relative;
-      left: 40%;
-      background-color: #3260f6;
-      padding: 5px;
-      color: #ffffff;
-      font-size: 15px;
-    }
+button {
+  width: 50px;
+  height: 30px;
+  border-radius: 6px;
+  border-width: 1px;
+}
 
-    /****************新增与修改界面****************/
-    .bg{
-      position: absolute;
-      top: 25%;
-      left: 40%;
-      width: 30%;
-      height: 62%;
-      background: rgba(0, 0, 0,0.5);
-      border-radius: 10px;
-      display: block;
-    }
-    .showbg{
-      position: absolute;
-      top: 25%;
-      left: 40%;
-      width: 30%;
-      height: 62%;
-      background: rgba(0, 0, 0,0.5);
-      border-radius: 10px;
-      display: block;
-    }
-    .showInput{
-      position: relative;
-      top: 30px;
-      left: 15%;
-      width: 300px;
-      height: 30px;
-      margin: 8px;
-      float: left;
-      border: 1px solid #249be5;
-      border-radius: 10px;
-    }
-    .sure{
-      position: relative;
-      top: 358px;
-      left: -30%;
-      width: 100px;
-      border: 1px solid #249be5;
-      border-radius: 10px;
-    }
-    .close{
-      position: relative;
-      top: 8px;
-      left: 20%;
-      width: 40px;
-      border: 1px solid #54ade8;
-      background-color: #110707;
-      border-radius: 10px;
-    }
-    /**************************/
+table, th{
+  border: 1px solid #cccccc;
+  border-collapse: collapse;
+  text-align: center;
+  font-size: 16px;
+  margin-top: 15px;
+  margin-left: 10px;
+  /*height: 40px;*/
 
-    table{
-      margin: 2%;
-      width: 96%;
-    }
-    th{
-      border: 2px solid black;
-      background-color: #569dfa;
-    }
-    td{
-      border: 2px solid black;
-    }
-    .alter,.delect{
-      position:relative;
-      left: 30%;
-    }
+}
+/*表格间隔条纹样式*/
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
 
+tr{  /*表格行宽*/
+  height: 45px;
+}
+td {
+  border: 1px solid #cccccc;
+  font-size: 14px;
+  width: 145px;
+  height: 30px;
+}
+
+/*遮罩层样式*/
+.editdialog {
+  display: block;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 22;
+}
+
+/*让编辑框居中*/
+.editBox {
+  display: block;
+  width: 600px;
+  height: 400px;
+  background-color: aqua;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin-top: 50px;
+}
+label {  /*编辑框label样式*/
+  display: inline-block;
+  width: 80px;
+  text-align: left;
+  margin-right: 15px;
+  margin-top: 15px;
+}
+
+.edit { /*编辑框内文字居中*/
+  text-align: center;
+}
+
+input {  /*输入框样式*/
+  border-radius: 0.5em; /*圆角边框弧度*/
+  text-align: center;
+}
+
+select { /*下拉选择框*/
+  border-radius: 0.5em; /*圆角边框弧度*/
+}
 </style>

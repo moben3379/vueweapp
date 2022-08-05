@@ -1,6 +1,7 @@
 <template>
   <div class="main">
     <router-view></router-view>
+
   </div>
 </template>
 
@@ -15,5 +16,6 @@ export default {
   width: 85%;
   height: 90%;
   float: left;
+  background-color: rgba(237,239,242,0.5);
 }
 </style>

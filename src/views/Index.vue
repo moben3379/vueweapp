@@ -1,7 +1,7 @@
 <template>
   <div class="index">
-    <Header></Header>
     <side-bar></side-bar>
+    <Header></Header>
     <router-view></router-view>
   </div>
 </template>

@@ -26,14 +26,14 @@
           <td>{{ list.deptName }}</td>
           <td>{{ list.roleNames }}</td>
           <td>
-            <button @click="isShowEdit(index)"> 修改</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button @click="isShowDelete(index)"> 删除</button>
+            <button @click="isShowEdit(index)" class="update_but" style="background-color: rgb(0,136,255)"><i class=" fa fa-pencil"></i> 修改</button>&nbsp;&nbsp;
+            <button @click="isShowDelete(index)" class="del_but" style="background-color: rgb(244,108,108)"><i class="fa fa-trash-o"></i> 删除</button>
           </td>
         </tr>
       </table>
     </div>
     <div id="buttons">
-      <button @click="addVisible=true">+新增</button>  <!--点击新增按钮时弹出框显示-->
+      <button @click="addVisible=true" class="add_but" style="background-color: rgb(41,154,57)"><i class="fa fa-plus " ></i> 新增</button>  <!--点击新增按钮时弹出框显示-->
     </div>
 
     <!--    新增操作页面-->
@@ -58,8 +58,8 @@
             <option :value="4">测试人员</option>
           </select><br>
 
-          <button class="editBut" @click="insertUser">保存</button>&nbsp;&nbsp;
-          <button class="editBut" @click="addVisible=false">取消</button>
+          <button class="editBut" @click="insertUser" style="background-color: rgb(0,136,255)">保存</button>&nbsp;&nbsp;
+          <button class="editBut" @click="addVisible=false" style="background-color: rgb(244,108,108)">取消</button>
         </div>
       </div>
     </div>
@@ -86,8 +86,8 @@
             <option :value="4">测试人员</option>
           </select>
           <br>
-          <button class="editBut" @click="editUser()">保存</button>&nbsp;&nbsp;
-          <button class="editBut" @click="editVisible=false">取消</button>
+          <button class="editBut" style="background-color: rgb(0,136,255)" @click="editUser()">保存</button>&nbsp;&nbsp;
+          <button class="editBut" style="background-color: rgb(244,108,108)" @click="editVisible=false">取消</button>
         </div>
       </div>
     </div>
@@ -98,8 +98,8 @@
       <div class="deleteMenu">
         <p id="p"><b>是否删除该用户？</b></p>
         <div id="yn">
-          <input id="yes" type="button" value="确认" @click="deleteUser"/>
-          <input id="no" type="button" value="取消" @click="deleteVisible=false;"/>
+          <input id="yes" type="button" style="background-color: rgb(0,136,255)" value="确认" @click="deleteUser"/>
+          <input id="no" type="button" style="background-color: rgb(244,108,108)" value="取消" @click="deleteVisible=false;"/>
         </div>
       </div>
     </div>
@@ -159,15 +159,15 @@ export default {
 
 
     //获取用户列表
-    getUserList() {
+   /* getUserList() {
       this.$api.user.findUserList("user/findUserList")
           .then(res => {
             this.UserList = res
             console.log("用户列表", res);
-            /*this.$store.commit('setList',this.UserList);*/
+            /!*this.$store.commit('setList',this.UserList);*!/
           })
     },
-
+*/
     //新增用户
     insertUser() {
       console.log("新增的用户：", this.UserList)
@@ -210,7 +210,7 @@ export default {
           .then(res => {
             if(res==2){
               console.log("删除成功");
-              location.reload()
+
             }
 
           })
@@ -220,7 +220,13 @@ export default {
   },
 
   mounted() {
-    this.getUserList()
+    // this.getUserList()
+    this.$api.user.findUserList("user/findUserList")
+        .then(res => {
+          this.UserList = res
+          console.log("用户列表", res);
+         /* this.$store.commit('setList',this.UserList);*/
+        })
   },
 
 
@@ -235,26 +241,39 @@ export default {
 
 button {
   width: 50px;
+  height: 30px;
+  border-radius: 6px;
+  border-width: 0px;
+  color: white;
 }
 
-table, th, td {
-  border: 1px solid #cccccc;
+/*表格单元格样式*/
+table, th{
+  border: 1px solid #cccccc; /*表格边框*/
   border-collapse: collapse;
   text-align: center;
   font-size: 16px;
   margin-top: 15px;
-  height: 30px;
+  margin-left: 10px;
+  /*height: 40px;*/
+
+}
+/*表格间隔条纹样式*/
+tr:nth-child(even) {
+  background-color: #f2f2f2;
 }
 
+tr{  /*表格行宽*/
+  height: 45px;
+}
 td {
+  border: 1px solid #cccccc;
   font-size: 14px;
-  width: 150px;
+  width: 145px;
   height: 30px;
 }
 
-a {
-  padding: 10px;
-}
+
 
 .checkbox {
   width: 50px;
@@ -275,9 +294,10 @@ a {
 /*让编辑框居中*/
 .editBox {
   display: block;
-  width: 600px;
-  height: 400px;
-  background-color: aqua;
+  width: 500px;
+  height: 450px;
+  border-radius: 10px;
+  background-color:rgb(255,255,255);
   position: absolute;
   top: 50%;
   left: 50%;
@@ -285,25 +305,39 @@ a {
   margin-top: 50px;
 }
 
-label {
+label {  /*编辑框label样式*/
   display: inline-block;
   width: 80px;
   text-align: right;
   margin-right: 15px;
-  margin-top: 15px;
+  margin-top: 25px;
+  font-size: 16px;
+  font-family:"Arial Narrow";
 }
 
-.edit {
-  text-align: center;
+.edit { /*编辑框内容居中*/
+  margin-left: 60px;
+
 }
 
-input {
+.edit>input {  /*输入框样式*/
   border-radius: 0.5em; /*圆角边框弧度*/
   text-align: center;
+  border-width: 1px ;
+  height: 25px;
+  width: 250px;
 }
 
-select {
+select { /*下拉选择框*/
   border-radius: 0.5em; /*圆角边框弧度*/
+  height: 25px;
+  width: 250px;
+  text-align: center;
+}
+.editBut{/*确认和取消按钮样式*/
+  margin-top: 40px;
+  margin-left: 100px;
+  font-size: 16px;
 }
 
 .deleteMenu { /*删除窗口的样式*/
@@ -329,5 +363,7 @@ select {
 #no { /*删除窗口“否”按钮的样式*/
   margin-left: 45px;
 }
+
+
 
 </style>

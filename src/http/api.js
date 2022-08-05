@@ -5,7 +5,6 @@ import * as menu from "@/http/modules/menu"
 import * as user from "@/http/modules/user";
 import * as foodmenu from "@/http/modules/foodmenu"
 import * as systemMenu from "@/http/modules/systemMenu";
-import * as foodmenu from "@/http/modules/foodmenu";
 import {orderList,searchOrderList} from "@/http/modules/orderList";
 
 

@@ -13,9 +13,9 @@ export default {
             state.perms = perms;
             console.log("给perms赋值：", perms)
         },
-        /*setList(state, list) {
+        /*insertUserList(state, list) {
             state.list = list;
-            console.log("获取用户列表：", list)
+            console.log("获取新增用户信息：", list)
         },*/
     },
     actions: {
@@ -26,7 +26,7 @@ export default {
         setPerms(ctx,payload){
             ctx.commit(payload.type,payload.data);//调用mutation的setNavTree
         },
-        /*setList(ctx,payload){
+        /*insertUserList(ctx,payload){
             ctx.commit(payload.type,payload.data);
         }*/
     },

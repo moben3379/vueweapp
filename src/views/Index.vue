@@ -26,6 +26,6 @@ export default {
 }
 .index{
   width: 100%;
-  height: 800px;
+  height: 753px;
 }
 </style>

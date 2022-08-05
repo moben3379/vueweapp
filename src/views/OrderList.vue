@@ -99,7 +99,7 @@ export default {
   methods:{
     /*获取所有订单*/
     getOrderList(){
-      this.$api.orderList.orderList("/getOrderList")
+      this.$api.orderList("/getOrderList")
           .then(res=>{
             this.OrderList=res;
             console.log(this.OrderList);
@@ -110,7 +110,7 @@ export default {
     /*订单查询*/
 
     searchOrderList() {
-      this.$api.orderList.searchOrderList("/searchOrderList", this.searchList)
+      this.$api.searchOrderList("/searchOrderList", this.searchList)
           .then(res => {
             this.searchBack = res;
             this.isShowSearchTable=true;

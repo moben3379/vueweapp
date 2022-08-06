@@ -18,5 +18,4 @@ export function addMenuInformation(url,params){
 
 export function deleteMenu(url,params) {
     return post(url,params);
-
 }

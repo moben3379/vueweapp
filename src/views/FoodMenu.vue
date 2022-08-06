@@ -38,21 +38,28 @@
 
 <!--      这里是修改界面      -->
 <!--    class="showAlterAdd"-->
-    <div class="bg" v-if="showBg.bg">
-      <button class="close" @click="hidebg">X</button>
-      <input :class="{showInput:true}" type="text" v-model="this.id" name="id" placeholder="菜品编号"/>
-      <input :class="{showInput:true}" type="text" v-model="this.name" name="name" placeholder="菜品名称"/>
-      <input :class="{showInput:true}" type="text" v-model="this.price"  placeholder="菜品价格"/>
-      <select :class="{showInput:true} " v-model="this.form">
-        <option selected>好吃家常</option>
-        <option>营养套餐</option>
-        <option>请客大宴</option>
-        <option>美味小吃</option>
-      </select>
-      <input :class="{showInput:true}" type="text" v-model="this.count" placeholder="数量"/>
-      <input :class="{showInput:true}" type="text" v-model="this.icon"  placeholder="上传图片"/>
-      <input :class="{showInput:true}" type="text" v-model="this.detail" placeholder="详细描述"/>
-      <button class="sure" @click="SureAlter">确定</button>
+
+    <div class="editdialog" v-if="showBg.bg">
+      <div class="editBox">
+        <div class="edit">
+          <!--      <button class="close" @click="hidebg">X</button>-->
+          <label>菜单编号：</label><input :class="{showInput:true}" type="text" v-model="this.id" name="id" placeholder="菜品编号"/><br>
+          <label>菜品名称：</label><input :class="{showInput:true}" type="text" v-model="this.name" name="name" placeholder="菜品名称"/><br>
+          <label>菜品价格：</label><input :class="{showInput:true}" type="text" v-model="this.price"  placeholder="菜品价格"/><br>
+          <label>菜品类别：</label>
+          <select :class="{showInput:true} " v-model="this.form">
+            <option selected>好吃家常</option>
+            <option>营养套餐</option>
+            <option>请客大宴</option>
+            <option>美味小吃</option>
+          </select><br>
+          <label>菜品数量：</label><input :class="{showInput:true}" type="text" v-model="this.count" placeholder="数量"/><br>
+          <label>菜品图片：</label><input :class="{showInput:true}" type="text" v-model="this.icon"  placeholder="上传图片"/><br>
+          <label>菜品描述：</label><input :class="{showInput:true}" type="text" v-model="this.detail" placeholder="详细描述"/><br>
+          <button class="sure" @click="SureAlter">确定</button>
+          <button class="close" @click="hidebg">取消</button>
+        </div>
+      </div>
     </div>
     
     <div>
@@ -109,6 +116,7 @@
 export default {
 
   name: "FoodMenuPage",
+
   //___________________________________________________________________________________________
   data(){
     return {
@@ -173,6 +181,9 @@ export default {
           let Detail=this.detail
       console.log(Id,Name,Price,Form,Count,Icon,Detail)
       this.$api.foodmenu.alterMenuInformation("/alterMenuInformation",{'Id':Id,'Name':Name,'Price':Price,'Form':Form,'Count':Count,'Icon':Icon,'Detail':Detail})
+      
+      this.getMenuInformation()
+      
       this.hidebg()
       location.reload();
     },
@@ -188,6 +199,7 @@ export default {
             //  重新加载
             }
           })
+
     },
     addhidebg(){
       this.addshowBg.bg=!this.addshowBg.bg
@@ -235,11 +247,45 @@ export default {
   },
 
   //___________________________________________________________________________________________
+
 }
 
 </script>
 
 <style scoped>
+
+button {
+  width: 50px;
+  height: 30px;
+  border-radius: 6px;
+  border-width: 1px;
+}
+
+table, th{
+  border: 1px solid #cccccc;
+  border-collapse: collapse;
+  text-align: center;
+  font-size: 16px;
+  margin-top: 15px;
+  margin-left: 10px;
+  /*height: 40px;*/
+
+}
+/*表格间隔条纹样式*/
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr{  /*表格行宽*/
+  height: 45px;
+}
+td {
+  border: 1px solid #cccccc;
+  font-size: 14px;
+  width: 145px;
+  height: 30px;
+}
+
     div>button{
       position:relative;
       left: 40%;
@@ -303,20 +349,57 @@ export default {
       border-radius: 10px;
     }
     /**************************/
-
-    table{
-      margin: 2%;
-      width: 96%;
-    }
-    th{
-      border: 2px solid black;
-      background-color: #569dfa;
-    }
-    td{
-      border: 2px solid black;
-    }
     .alter,.delete{
       position:relative;
       left: 30%;
     }
+
 </style>
+
+
+/*遮罩层样式*/
+.editdialog {
+  display: block;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 22;
+}
+
+/*让编辑框居中*/
+.editBox {
+  display: block;
+  width: 600px;
+  height: 400px;
+  background-color: aqua;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin-top: 50px;
+}
+label {  /*编辑框label样式*/
+  display: inline-block;
+  width: 80px;
+  text-align: left;
+  margin-right: 15px;
+  margin-top: 15px;
+}
+
+.edit { /*编辑框内文字居中*/
+  text-align: center;
+}
+
+input {  /*输入框样式*/
+  border-radius: 0.5em; /*圆角边框弧度*/
+  text-align: center;
+}
+
+select { /*下拉选择框*/
+  border-radius: 0.5em; /*圆角边框弧度*/
+}
+</style>
+

@@ -36,13 +36,20 @@ export default {
 <style scoped>
 
   .header{
-    width: 100%;
+    display: block;
+    /*width: 100%;*/
+    width: 85%;
     height: 10%;
-    background-color: #3260f6;
+    float: left;
+    /*background-color: rgb(30,43,111);*/
+    background-color: white;
+  }
+  .header i{
+    margin-top: 30px;
   }
   .user{
     position: absolute;
-    margin-left: 1400px;
+    margin-left: 1200px;
     margin-top: 50px;
   }
   .user a{

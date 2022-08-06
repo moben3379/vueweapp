@@ -75,7 +75,7 @@
         <td> {{food.menu_Count }}</td>
         <td> {{ food.menu_Icon }}</td>
         <td> {{ food.menu_detail }}</td>
-        <td > <button  class="delect">删除</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button  @click="AlterInterfaceShow(index)"  class="alter">修改</button></td>
+        <td > <button  class="delete" @click="deleteMenu(food.menu_Id)">删除</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button  @click="AlterInterfaceShow(index)"  class="alter">修改</button></td>
       </tr>
     </table>
   </div>
@@ -83,8 +83,8 @@
 
   <!--      这里是新增界面      -->
   <!--    class="showAlterAdd"-->
-  <div class="bg" v-if="showBg.bg">
-    <button class="close" @click="hidebg">X</button>
+  <div class="bg" v-if="addshowBg.bg">
+    <button class="close" @click="addhidebg">X</button>
     <input :class="{showInput:true}" type="text" v-model="this.Id" name="id" placeholder="菜品编号"/>
     <input :class="{showInput:true}" type="text" v-model="this.Name" name="name" placeholder="菜品名称"/>
     <input :class="{showInput:true}" type="text" v-model="this.Price"  placeholder="菜品价格"/>
@@ -105,35 +105,41 @@
 <script>
 
 
+
 export default {
 
   name: "FoodMenuPage",
   //___________________________________________________________________________________________
   data(){
-    return{
-      FoodMenu:[],
-      searchList:'',
-      searchBack:[],
-      isShowSearchTable:false,
+    return {
+      FoodMenu: [],
+      searchList: '',
+      searchBack: [],
+      isShowSearchTable: false,
       //背景显示
       showBg: {
-        bg:false,
-        hidebg:false
+        bg: false,
+        hidebg: false
       },
-
+      addshowBg: {
+        bg: false,
+        hidebg: false
+      },
     }
   },
   mounted() {
       //  向后台发送请求，获取食物菜单信息，建立menu.js在modiles里
-      this.$api.foodmenu.findMenuInformation("getmenu/findMenuInformation")
+    this.getMenu();
+  },
+  //___________________________________________________________________________________________
+  methods:{
+    getMenu(){
+      this.$api.foodmenu.findMenuInformation("/findMenuInformation")
           .then(res=>{
             console.log("获取菜单信息有：",res)
             this.FoodMenu=res;
           })
-  },
-  //___________________________________________________________________________________________
-  methods:{
-
+    },
   //  修改菜单界面
     AlterInterfaceShow(index){
       for(let i=0;i<this.FoodMenu.length;i++){
@@ -154,7 +160,7 @@ export default {
     },
     hidebg(){
       this.showBg.bg=!this.showBg.bg
-      this.showBg.showbg=!this.showBg.showbg
+      this.showBg.hidebg=!this.showBg.hidebg
     },
   //  确定修改
     SureAlter(){
@@ -166,32 +172,31 @@ export default {
           let Icon=this.icon
           let Detail=this.detail
       console.log(Id,Name,Price,Form,Count,Icon,Detail)
-      this.$api.foodmenu.alterMenuInformation("getmenu/alterMenuInformation",{'Id':Id,'Name':Name,'Price':Price,'Form':Form,'Count':Count,'Icon':Icon,'Detail':Detail})
-      // this.$api.foodmenu.alterMenuInformation("getmenu/alterMenuInformation",JSON.stringify(this.FoodMenu))
-      // this.getMenuInformation(),
+      this.$api.foodmenu.alterMenuInformation("/alterMenuInformation",{'Id':Id,'Name':Name,'Price':Price,'Form':Form,'Count':Count,'Icon':Icon,'Detail':Detail})
       this.hidebg()
       location.reload();
     },
     // 删除菜品
     deleteMenu(deleteid){
-      console.log(deleteid)
-      this.$api.foodmenu.deleteMenu("getmenu/deleteMenu",deleteid)
+      this.$api.foodmenu.deleteMenu("/deleteMenu",deleteid)
           .then(res=>{
             if (res==0){
               alert("删除失败")
             }else {
               alert("确定要删除吗");
               location.reload();
-
             //  重新加载
             }
           })
     },
-
+    addhidebg(){
+      this.addshowBg.bg=!this.addshowBg.bg
+      this.addshowBg.hidebg=!this.addshowBg.hidebg
+    },
     //新增菜品
     addMenuInformation(){
       console.log("准备新增菜品！！！！！！！！！！");
-      this.showBg.bg=!this.showBg.bg;
+      this.addshowBg.bg=!this.showBg.bg;
     },
     SureAdd(){
       console.log("确认新增！！！！！！！！！！！！");
@@ -203,36 +208,32 @@ export default {
       let Icon=this.Icon
       let Detail=this.Detail
       console.log(Id,Name,Price,Form,Count,Icon,Detail)
-      this.$api.foodmenu.addMenuInformation("getmenu/addMenuInformation",{'Id':Id,'Name':Name,'Price':Price,'Form':Form,'Count':Count,'Icon':Icon,'Detail':Detail})
+      this.$api.foodmenu.addMenuInformation("/addMenuInformation",{'Id':Id,'Name':Name,'Price':Price,'Form':Form,'Count':Count,'Icon':Icon,'Detail':Detail})
           .then(res=>{
             console.log("输出结果：",res);
-            this.hidebg();
+            this.addhidebg();
             location.reload();//刷新整个页面
           })
-    }
+    },
 
     // 准确查询
     searchMenu(){
-      this.$api.foodmenu.searchMenu("getmenu/searchMenu", this.searchList)
+      this.$api.foodmenu.searchMenu("/searchMenu", this.searchList)
           .then(res => {
-            this.searchBack = res;
-            console.log(res)
-            this.isShowSearchTable=true;
-            // console.log(this.searchBack);
-          })
+            if(res==null){
+              location.reload();
+            }else {
+              this.searchBack = res;
+              console.log(res)
+              this.isShowSearchTable = true;
+              // console.log(this.searchBack);
+            }})
     },
     returnInitPage(){
       this.isShowSearchTable=false;
     },
   },
-  //___________________________________________________________________________________________
-  //存储信息
-  computed: {
-    FoodMenu() {
-      let st= JSON.parse(sessionStorage.getItem("res"))
-      return st
-    }
-  },
+
   //___________________________________________________________________________________________
 }
 
@@ -318,5 +319,4 @@ export default {
       position:relative;
       left: 30%;
     }
-
 </style>

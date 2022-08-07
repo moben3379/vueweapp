@@ -1,13 +1,12 @@
 <template>
-  <div id="manin_tb">
+  <div id="main_tb">
 <!--    <input type="text" ref="getValue"><button @click="find">查询</button>-->
-    <button id="b_add" @click="add">新增</button>
     <table>
-      <caption id="caption">系统菜单</caption>
+<!--      <caption id="caption">系统菜单</caption>-->
       <tr>
-        <th><input type="checkbox" id="checkbox">全选</th>
-        <th>ID</th>
-        <th>父菜单ID</th>
+        <th><input type="checkbox" class="checkbox"></th>
+        <th>编号</th>
+        <th>父菜单编号</th>
         <th>菜单名称</th>
         <th>菜单地址</th>
         <th>菜单授权</th>
@@ -16,8 +15,8 @@
         <th>菜单排序</th>
         <th>操作</th>
       </tr>
-      <tr v-for="(menu) in SystemMenuList" :key="menu.id">
-        <td><input type="checkbox" :value="menu.id" v-model="checkedMenu"></td>
+      <tr v-for="(menu) in newdata" :key="menu.id">
+        <td><input class="checkbox" type="checkbox" :value="menu.id" v-model="checkedMenu"></td>
         <td>{{menu.id}}</td>
         <td>{{menu.parentId}}</td>
         <td>{{menu.name}}</td>
@@ -27,11 +26,23 @@
         <td>{{menu.icon}}</td>
         <td>{{menu.orderNum}}</td>
         <td>
-          <button id="b_update" @click="update">修改</button>
-          <button id="b_delete" @click="Delete">删除</button>
+          <button id="b_update" @click="update" style="background-color: rgb(0,136,255)"><i class=" fa fa-pencil"></i> 修改</button>&nbsp;&nbsp;
+          <button id="b_delete" @click="Delete" style="background-color: rgb(244,108,108)"><i class="fa fa-trash-o"></i> 删除</button>
         </td>
       </tr>
     </table>
+    <div id="buttons">
+      <button id="b_add" @click="add" style="background-color: rgb(41,154,57)"><i class="fa fa-plus " ></i> 新增</button>
+    </div>
+    <div id="page">
+      <ul class="pagination">
+        <li>第{{pageNum}}页</li>
+        <li><button @click="getpagedata(pageNum-1)" style="background-color: rgb(0,136,255)">上一页</button></li>
+        <li v-for="m in addpage()" :key="m"><a href="#" @click="getpagedata(m)">[{{m}}]</a></li>
+        <li><button @click="getpagedata(pageNum+1)" style="background-color: rgb(0,136,255)">下一页</button></li>
+      </ul>
+    </div>
+
   </div>
 <!--  添加数据输入窗口-->
   <div id="bg_add">
@@ -43,7 +54,8 @@
       菜单类型：<input type="text" name="Type" id="type" v-model="addForm.type"><br>
       菜单图标：<input type="text" name="Icon" id="icon" v-model="addForm.icon"><br>
       菜单排序：<input type="text" name="OrderNum" id="orderNum" v-model="addForm.orderNum"><br>
-      <input type="button" id="add" value="保存" @click="saveAdd"><input type="button" id="cancelA" value="取消" @click="cancelA">
+      <button id="add" class="editBut" @click="saveAdd" style="background-color: rgb(0,136,255)">保存</button>
+      <button class="editBut" id="cancelA" @click="cancelA" style="background-color: rgb(244,108,108)">取消</button>
     </div>
   </div>
 
@@ -57,7 +69,8 @@
       菜单类型：<input type="text" name="Type" id="Xtype" v-model="updateForm.type"><br>
       菜单图标：<input type="text" name="Icon" id="Xicon" v-model="updateForm.icon"><br>
       菜单排序：<input type="text" name="OrderNum" id="XorderNum" v-model="updateForm.orderNum"><br>
-      <input type="button" id="update" value="保存" @click="saveUpdate"><input type="button" id="cancelU" value="取消" @click="cancelU">
+      <button id="update" class="editBut" @click="saveUpdate" style="background-color: rgb(0,136,255)">保存</button>
+      <button id="cancelU" class="editBut" @click="cancelU" style="background-color: rgb(244,108,108)">取消</button>
     </div>
   </div>
 
@@ -66,8 +79,8 @@
     <div class="deleteMenu">
       <p id="p"><b>是否删除这一条数据?</b></p>
       <div id="yn">
-        <input id="yes" type="button" value="是" @click="yes();"/>
-        <input id="no" type="button" value="否" @click="no();"/>
+        <input id="yes" type="button" value="确认" style="background-color: rgb(0,136,255)" @click="yes();"/>
+        <input id="no" type="button" value="取消" style="background-color: rgb(244,108,108)" @click="no();"/>
       </div>
     </div>
   </div>
@@ -99,15 +112,35 @@ export default {
         type: "",
         icon: "",
         orderNum: ""
-      }
+      },
+      totallpage: 0, //总页数
+      pagenumber: 10, //每页多少条
+      page:0,
+      array: [], //存放共有多少页
+      newdata:[],
+      pageNum:1,
     }
   },
   mounted() {
-    this.sysMenu();
+    this.sysMenu()
   },
   computed: {
   },
   methods: {
+    //将页数变成一个array数组，显示在页面上
+    addpage() {
+      for (let i = 0; i < this.totallpage; i++) {
+        this.array[i] = i + 1;
+      }
+      return this.array;
+    },
+    //根据页数来分割数组
+    getpagedata(index){
+      this.page =index;
+      this.newdata = this.SystemMenuList.slice((this.page-1)*this.pagenumber,
+          (this.page)*this.pagenumber);
+      this.pageNum=index;
+    },
     /*获得sys_menu里的菜单数据*/
     sysMenu() {
       this.$api.systemMenu.systemMenuList("/getSystemMenuList")
@@ -115,7 +148,15 @@ export default {
             console.log(res);
             this.SystemMenuList=res;
             console.log("拿到的具体系统菜单是：",res);
-          })
+
+            this.totallpage = this.SystemMenuList.length/this.pagenumber;//计算出共需要多少页
+            console.log("一共要分为多少页：",this.totallpage);
+            console.log("数组里面是：",this.array);
+            console.log("分页后页面的数据是：",this.newdata);
+          }).then(res=>{
+        console.log(res);
+        this.getpagedata(1);
+      })
     },
 
     /*新增菜单数据*/
@@ -201,20 +242,39 @@ export default {
 </script>
 
 <style scoped>
-#manin_tb{ /*右侧显示总的div的样式*/
-  padding: 12px 12px 12px 12px;
-}
-#caption{ /*标题的样式*/
-  font-size:larger;
-  font-weight: bold;
-}
 table,th,td{ /*表格的样式*/
-  border: 1px solid black;
+  border: 1px solid #cccccc; /*表格边框*/
   border-collapse: collapse;
+  text-align: center;
+  font-size: 16px;
+  margin-top: 15px;
+  margin-left: 10px;
 }
-#b_add{  /*新增键的样式*/
-  width: 70px;
-  height: 25px;
+
+tr:nth-child(even) {  /*表格间隔条纹样式*/
+  background-color: #f2f2f2;
+}
+tr{  /*表格行宽*/
+  height: 45px;
+}
+td {
+  border: 1px solid #cccccc;
+  font-size: 14px;
+  width: 125px;
+  height: 30px;
+}
+.checkbox { /*复选框样式*/
+  width: 50px;
+}
+#buttons { /*新增框的样式*/
+  margin: 10px 0 0 10px;
+}
+button{  /*新增键的样式*/
+  width: 50px;
+  height: 30px;
+  border-radius: 6px;
+  border-width: 0px;
+  color: white;
 }
 #bg_add,#bg_update,#bg_delete{  /*遮罩层的样式*/
   display: none;
@@ -236,17 +296,20 @@ table,th,td{ /*表格的样式*/
   transform: translate(-50%, -50%);
   padding: 20px 20px 20px 20px;
   text-align: center;
+  border-radius: 10px;
 }
 .newMenu>input{  /*新增输入框（input）的样式*/
   width: 180px;
   height: 20px;
   margin: 10px 10px 10px 10px;
+  border-radius: 0.5em; /*圆角边框弧度*/
+  border-width: 1px ;
 }
-#b_update{ /*修改键的样式*/
-  font-size: medium;
-}
-#b_delete{  /*删除键的样式*/
-  font-size: medium;
+.editBut{/*确认和取消按钮样式*/
+  margin-top: 30px;
+  margin-left: 60px;
+  font-size: 16px;
+  color: white;
 }
 .deleteMenu { /*删除窗口的样式*/
   width: 200px;
@@ -267,5 +330,21 @@ table,th,td{ /*表格的样式*/
 }
 #no{  /*删除窗口“否”按钮的样式*/
   margin-left: 45px;
+}
+#page{ /*上下页框的位置*/
+  position: absolute;
+  left: 50%;
+}
+.pagination{ /*上下页的格式*/
+  list-style: none;
+  position: absolute;
+  width: 500px;
+}
+.pagination>li{ /*上下页的格式*/
+  float: left;
+  margin-left: 5px;
+}
+.pagination>li>a { /*上下页的格式*/
+  text-decoration: none;
 }
 </style>

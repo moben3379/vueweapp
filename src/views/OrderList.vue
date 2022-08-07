@@ -22,7 +22,7 @@
     <th style="width: 80px">订单状态</th>
     <th style="width: 150px;border:1px;">操作</th>
   </tr>
-  <tr v-for="(order,index) in OrderList" :key="order.id">
+  <tr v-for="(order,index) in newdata" :key="order.id">
     <td><input type="checkbox"></td>
     <td>{{order.buyer_openid}}</td>
     <td>{{order.buyer_name}}</td>
@@ -78,6 +78,15 @@
       </td>
     </tr>
   </table>
+  <div id="pageTop"></div>
+  <div id="page">
+    <ul class="pagination">
+      <li>第{{pageNum}}页</li>
+      <li><button @click="getpagedata(pageNum-1)">上一页</button></li>
+      <li v-for="m in addpage()" :key="m"><a href="#" @click="getpagedata(m)">[{{m}}]</a></li>
+      <li><button @click="getpagedata(pageNum+1)">下一页</button></li>
+    </ul>
+  </div>
 
 </template>
 
@@ -94,15 +103,45 @@ export default {
       isShowSearchTable:false,
       OrderList:[],
 
+      totallpage: 0, //总页数
+      pagenumber: 10, //每页多少条
+      page:0,
+      array: [], //存放共有多少页
+      newdata:[],
+      pageNum:1,
+
     }
   },
   methods:{
+    //将页数变成一个array数组，显示在页面上
+    addpage() {
+      for (let i = 0; i < this.totallpage; i++) {
+        this.array[i] = i + 1;
+      }
+      return this.array;
+    },
+    //根据页数来分割数组
+    getpagedata(index){
+      this.page =index;
+      this.newdata = this.OrderList.slice((this.page-1)*this.pagenumber,
+          (this.page)*this.pagenumber);
+      this.pageNum=index;
+    },
+
     /*获取所有订单*/
     getOrderList(){
       this.$api.orderList("/getOrderList")
           .then(res=>{
             this.OrderList=res;
             console.log(this.OrderList);
+
+            this.totallpage = this.OrderList.length/this.pagenumber;//计算出共需要多少页
+            console.log("一共要分为多少页：",this.totallpage);
+            console.log("数组里面是：",this.array);
+            console.log("分页后页面的数据是：",this.newdata);
+          }).then(res=>{
+            console.log(res);
+            this.getpagedata(1);
           })
     },
 
@@ -175,5 +214,24 @@ tr{
 }
 td{
   border:0px;
+}
+#page{ /*上下页框的位置*/
+  position: absolute;
+  left: 50%;
+}
+.pagination{ /*上下页的格式*/
+  list-style: none;
+  position: absolute;
+  width: 500px;
+}
+.pagination>li{ /*上下页的格式*/
+  float: left;
+  margin-left: 5px;
+}
+.pagination>li>a { /*上下页的格式*/
+  text-decoration: none;
+}
+#pageTop{ /*让上下页与订单框有距离*/
+  height: 15px;
 }
 </style>

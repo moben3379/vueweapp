@@ -3,17 +3,17 @@
   <div>
     <br/>
     <input type="text" class="input"  v-model="searchList" >
-    <button  @click="searchMenu()">查询菜单</button>&nbsp;&nbsp;&nbsp;
-    <button  @click="addMenuInformation">新增菜单</button>
+    <button  @click="searchMenu()">查询</button>&nbsp;&nbsp;&nbsp;
+    <button  @click="addMenuInformation">新增</button>
 
-    <br/>
+    <br/><br/>
 
     <table v-if="!isShowSearchTable">
       <tr>
         <th>菜单编号</th>
+        <th>菜品类别</th>
         <th>菜品名称</th>
         <th>菜品价格</th>
-        <th>菜品类别</th>
         <th>菜品数量</th>
         <th>菜品图片</th>
         <th>菜品描述</th>
@@ -21,9 +21,9 @@
       </tr>
       <tr v-for="(food,index) in FoodMenu " :key="food.id">
         <td><input type="checkbox"> {{ food.menu_Id }}</td>
+        <td> {{ food.menu_Form }}</td>
         <td> {{ food.menu_Name }}</td>
         <td> {{ food.menu_Price }}</td>
-        <td> {{ food.menu_Form }}</td>
         <td> {{food.menu_Count }}</td>
         <td> {{ food.menu_Icon }}</td>
         <td> {{ food.menu_detail }}</td>
@@ -42,22 +42,24 @@
     <div class="editdialog" v-if="showBg.bg">
       <div class="editBox">
         <div class="edit">
-          <!--      <button class="close" @click="hidebg">X</button>-->
-          <label>菜单编号：</label><input :class="{showInput:true}" type="text" v-model="this.id" name="id" placeholder="菜品编号"/><br>
-          <label>菜品名称：</label><input :class="{showInput:true}" type="text" v-model="this.name" name="name" placeholder="菜品名称"/><br>
-          <label>菜品价格：</label><input :class="{showInput:true}" type="text" v-model="this.price"  placeholder="菜品价格"/><br>
+          <button class="close" @click="hidebg">X</button>
+          <label>菜单编号：</label><input :class="{showInput:true}" type="text" v-model="this.id" name="id"/><br>
+          <label>菜品名称：</label><input :class="{showInput:true}" type="text" v-model="this.name" name="name" /><br>
+          <label>菜品价格：</label><input :class="{showInput:true}" type="text" v-model="this.price"  /><br>
           <label>菜品类别：</label>
           <select :class="{showInput:true} " v-model="this.form">
+            <option>美味小吃</option>
             <option selected>好吃家常</option>
             <option>营养套餐</option>
             <option>请客大宴</option>
-            <option>美味小吃</option>
+            <option>本店特色</option>
+            <option>其他美食</option>
           </select><br>
-          <label>菜品数量：</label><input :class="{showInput:true}" type="text" v-model="this.count" placeholder="数量"/><br>
-          <label>菜品图片：</label><input :class="{showInput:true}" type="text" v-model="this.icon"  placeholder="上传图片"/><br>
-          <label>菜品描述：</label><input :class="{showInput:true}" type="text" v-model="this.detail" placeholder="详细描述"/><br>
+          <label>菜品数量：</label><input :class="{showInput:true}" type="text" v-model="this.count" /><br>
+          <label>菜品图片：</label><input :class="{showInput:true}" type="text" v-model="this.icon"  /><br>
+          <label>菜品描述：</label><input :class="{showInput:true}" type="text" v-model="this.detail" /><br>
           <button class="sure" @click="SureAlter">确定</button>
-          <button class="close" @click="hidebg">取消</button>
+<!--          <button class="close" @click="hidebg">取消</button>-->
         </div>
       </div>
     </div>
@@ -66,9 +68,9 @@
     <table v-if="isShowSearchTable">
       <tr>
         <th>菜单编号</th>
+        <th>菜品类别</th>
         <th>菜品名称</th>
         <th>菜品价格</th>
-        <th>菜品类别</th>
         <th>菜品数量</th>
         <th>菜品图片</th>
         <th>菜品描述</th>
@@ -76,9 +78,9 @@
       </tr>
       <tr v-for="(food,index) in searchBack " :key="food.id">
         <td><input type="checkbox"> {{ food.menu_Id }}</td>
+        <td> {{ food.menu_Form }}</td>
         <td> {{ food.menu_Name }}</td>
         <td> {{ food.menu_Price }}</td>
-        <td> {{ food.menu_Form }}</td>
         <td> {{food.menu_Count }}</td>
         <td> {{ food.menu_Icon }}</td>
         <td> {{ food.menu_detail }}</td>
@@ -164,7 +166,6 @@ export default {
 
         }
       }
-
     },
     hidebg(){
       this.showBg.bg=!this.showBg.bg
@@ -180,12 +181,26 @@ export default {
           let Icon=this.icon
           let Detail=this.detail
       console.log(Id,Name,Price,Form,Count,Icon,Detail)
-      this.$api.foodmenu.alterMenuInformation("/alterMenuInformation",{'Id':Id,'Name':Name,'Price':Price,'Form':Form,'Count':Count,'Icon':Icon,'Detail':Detail})
-      
-      this.getMenuInformation()
-      
+      //进行别名转换
+      if(Form==this.FoodMenu[0].menu_Name){
+        Form=1
+      }else if(Form==this.FoodMenu[1].menu_Name){
+        Form=2
+      }else if(Form==this.FoodMenu[2].menu_Name){
+        Form=3
+      }else if(Form==this.FoodMenu[3].menu_Name){
+        Form=4
+      } else if(Form==this.FoodMenu[4].menu_Name){
+        Form=5
+      } else if(Form==this.FoodMenu[5].menu_Name){
+        Form=6
+      }
+      console.log(Id,Name,Price,Form,Count,Icon,Detail)
+      this.$api.foodmenu.alterMenuInformation("/alterMenuInformation",{'Id':Id,'Form':Form,'Name':Name,'Price':Price,'Count':Count,'Icon':Icon,'Detail':Detail})
+
       this.hidebg()
       location.reload();
+
     },
     // 删除菜品
     deleteMenu(deleteid){
@@ -208,7 +223,7 @@ export default {
     //新增菜品
     addMenuInformation(){
       console.log("准备新增菜品！！！！！！！！！！");
-      this.addshowBg.bg=!this.showBg.bg;
+      this.addshowBg.bg=!this.addshowBg.bg;
     },
     SureAdd(){
       console.log("确认新增！！！！！！！！！！！！");
@@ -219,6 +234,20 @@ export default {
       let Count=this.Count
       let Icon=this.Icon
       let Detail=this.Detail
+      //进行别名转换
+      if(Form==this.FoodMenu[0].menu_Name){
+        Form=1
+      }else if(Form==this.FoodMenu[1].menu_Name){
+        Form=2
+      }else if(Form==this.FoodMenu[2].menu_Name){
+        Form=3
+      }else if(Form==this.FoodMenu[3].menu_Name){
+        Form=4
+      } else if(Form==this.FoodMenu[4].menu_Name){
+        Form=5
+      } else if(Form==this.FoodMenu[5].menu_Name){
+        Form=6
+      }
       console.log(Id,Name,Price,Form,Count,Icon,Detail)
       this.$api.foodmenu.addMenuInformation("/addMenuInformation",{'Id':Id,'Name':Name,'Price':Price,'Form':Form,'Count':Count,'Icon':Icon,'Detail':Detail})
           .then(res=>{
@@ -245,9 +274,7 @@ export default {
       this.isShowSearchTable=false;
     },
   },
-
   //___________________________________________________________________________________________
-
 }
 
 </script>
@@ -260,15 +287,18 @@ button {
   border-radius: 6px;
   border-width: 1px;
 }
-
-table, th{
-  border: 1px solid #cccccc;
+table{
+  width: 95%;
+  margin-left: 2%;
+}
+ th{
+  border-top: 2px solid #cccccc;
+  border-bottom: 1px solid #cccccc;
   border-collapse: collapse;
   text-align: center;
   font-size: 16px;
   margin-top: 15px;
   margin-left: 10px;
-  /*height: 40px;*/
 
 }
 /*表格间隔条纹样式*/
@@ -276,41 +306,32 @@ tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-tr{  /*表格行宽*/
-  height: 45px;
-}
-td {
-  border: 1px solid #cccccc;
-  font-size: 14px;
-  width: 145px;
-  height: 30px;
-}
+  tr{  /*表格行宽*/
+    height: 35px;
+  }
+  td {
+    border: 1px solid #cccccc;
+    font-size: 14px;
+    width: 145px;
+    height: 10px;
+  }
 
     div>button{
       position:relative;
       left: 40%;
+
       background-color: #3260f6;
       padding: 5px;
       color: #ffffff;
       font-size: 15px;
     }
-.input{
-  position: relative;
-  left: 38%;
+    input{
+      position: relative;
+      left: 38%;
 
-}
-    /****************新增与修改界面****************/
-    .bg{
-      position: absolute;
-      top: 25%;
-      left: 40%;
-      width: 30%;
-      height: 62%;
-      background: rgba(0, 0, 0,0.5);
-      border-radius: 10px;
-      display: block;
     }
-    .showbg{
+    /****************新增与修改界面****************/
+    .bg,.editBox{
       position: absolute;
       top: 25%;
       left: 40%;
@@ -323,18 +344,26 @@ td {
     .showInput{
       position: relative;
       top: 30px;
-      left: 15%;
-      width: 300px;
+      left: 10%;
+      width: 250px;
       height: 30px;
       margin: 8px;
       float: left;
       border: 1px solid #249be5;
       border-radius: 10px;
     }
+  .edit>label{
+    position: relative;
+    top: 30px;
+    left: 5%;
+    color: white;
+    margin: 8px;
+    float: left;
+  }
     .sure{
       position: relative;
-      top: 358px;
-      left: -30%;
+      top: 60px;
+      left: 40%;
       width: 100px;
       border: 1px solid #249be5;
       border-radius: 10px;
@@ -356,50 +385,4 @@ td {
 
 </style>
 
-
-/*遮罩层样式*/
-.editdialog {
-  display: block;
-  position: absolute;
-  top: 0%;
-  left: 0%;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 22;
-}
-
-/*让编辑框居中*/
-.editBox {
-  display: block;
-  width: 600px;
-  height: 400px;
-  background-color: aqua;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  margin-top: 50px;
-}
-label {  /*编辑框label样式*/
-  display: inline-block;
-  width: 80px;
-  text-align: left;
-  margin-right: 15px;
-  margin-top: 15px;
-}
-
-.edit { /*编辑框内文字居中*/
-  text-align: center;
-}
-
-input {  /*输入框样式*/
-  border-radius: 0.5em; /*圆角边框弧度*/
-  text-align: center;
-}
-
-select { /*下拉选择框*/
-  border-radius: 0.5em; /*圆角边框弧度*/
-}
-</style>
 

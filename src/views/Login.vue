@@ -30,12 +30,6 @@ export default {
         username: 'liwei',
         password: 'lw1234'
       },
-      //设置登录页面背景图片
-      /*background:{
-        backgroundImage:"url("+require("../images/background.jpg")+")",
-        backgroundRepeat:"no-repeat",
-        backgroundSize:"100% 100%"
-      }*/
     }
   },
   methods: {

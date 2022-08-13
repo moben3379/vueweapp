@@ -14,6 +14,7 @@
         <th>菜品类别</th>
         <th>菜品名称</th>
         <th>菜品价格</th>
+        <th>菜品类别</th>
         <th>菜品数量</th>
         <th>菜品图片</th>
         <th>菜品描述</th>
@@ -124,6 +125,8 @@
 <script>
 
 
+
+import {findMenuInformation} from "@/http/modules/foodmenu";
 
 export default {
 

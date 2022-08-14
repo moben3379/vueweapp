@@ -1,47 +1,50 @@
 <template>
 
   <div>
-    <br/>
-    <input type="text" class="input"  v-model="searchList" >
-    <button  @click="searchMenu()">查询</button>&nbsp;&nbsp;&nbsp;
-    <button  @click="addMenuInformation">新增</button>
+    <div  class="search">
+      <input type="text" id="search"  v-model="searchList" >
+      <button  @click="searchMenu()" style="background-color: #FFD664"><i class="fa fa-search"></i>查询</button>&nbsp;&nbsp;&nbsp;
+      <button  @click="addMenuInformation" style="background-color: rgb(41,154,57)"><i class="fa fa-plus " ></i> 新增</button>
+    </div>
 
-    <br/><br/>
-
-    <table v-if="!isShowSearchTable">
-      <tr>
-        <th>菜单编号</th>
-        <th>菜品类别</th>
-        <th>菜品名称</th>
-        <th>菜品价格</th>
-        <th>菜品数量</th>
-        <th>菜品图片</th>
-        <th>菜品描述</th>
-        <th>操    作</th>
-      </tr>
-      <tr v-for="(food,index) in newdata " :key="food.id">
-        <td><input type="checkbox"> {{ food.menu_Id }}</td>
-        <td> {{ food.menu_Form }}</td>
-        <td> {{ food.menu_Name }}</td>
-        <td> {{ food.menu_Price }}</td>
-        <td> {{food.menu_Count }}</td>
-        <td> {{ food.menu_Icon }}</td>
-        <td> {{ food.menu_detail }}</td>
-        <td>
-          <button @click="deleteMenu(food.menu_Id)"  class="delete">删除</button>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <button @click="AlterInterfaceShow(index)" class="alter">修改</button>
-        </td>
-      </tr>
-    </table>
+    <div class="table">
+      <table v-if="!isShowSearchTable">
+        <tr>
+          <th class="checkbox"><input type="checkbox"></th>
+          <th>菜单编号</th>
+          <th>菜品类别</th>
+          <th>菜品名称</th>
+          <th>菜品价格</th>
+          <th>菜品数量</th>
+          <th>菜品图片</th>
+          <!--        <th>菜品描述</th>-->
+          <th>操  作</th>
+        </tr>
+        <tr v-for="(food,index) in newdata " :key="food.id">
+          <td class="checkbox"><input type="checkbox" v-model="food.checked"></td>
+          <td> {{ food.menu_Id }}</td>
+          <td> {{ food.menu_Form }}</td>
+          <td> {{ food.menu_Name }}</td>
+          <td> {{ food.menu_Price }}</td>
+          <td> {{food.menu_Count }}</td>
+          <td> {{ food.menu_Icon }}</td>
+          <!--        <td> {{ food.menu_detail }}</td>-->
+          <td>
+            <button @click="deleteMenu(food.menu_Id)"  style="background-color: rgb(244,108,108)"><i class="fa fa-trash-o"></i>删除</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button @click="AlterInterfaceShow(index)" class="alter" style="background-color: rgb(0,136,255)"><i class=" fa fa-pencil"></i> 修改</button>
+          </td>
+        </tr>
+      </table>
+    </div>
 
     <div id="pageTop"></div>
-    <div id="page">
+    <div id="page" v-if="isShowPage">
       <ul class="pagination">
         <li>第{{pageNum}}页</li>
-        <li><button @click="getpagedata(pageNum-1)">上一页</button></li>
+        <li><button @click="getpagedata(pageNum-1)" style="background-color: rgb(0,136,255)">上一页</button></li>
         <li v-for="m in addpage()" :key="m"><a href="#" @click="getpagedata(m)">[{{m}}]</a></li>
-        <li><button @click="getpagedata(pageNum+1)">下一页</button></li>
+        <li><button @click="getpagedata(pageNum+1)" style="background-color: rgb(0,136,255)">下一页</button></li>
       </ul>
     </div>
   </div>
@@ -52,7 +55,7 @@
     <div class="editdialog" v-if="showBg.bg">
       <div class="editBox">
         <div class="edit">
-          <button class="close" @click="hidebg">X</button>
+<!--          <button class="close" @click="hidebg">X</button>-->
           <label>菜单编号：</label><input :class="{showInput:true}" type="text" v-model="this.id" name="id"/><br>
           <label>菜品名称：</label><input :class="{showInput:true}" type="text" v-model="this.name" name="name" /><br>
           <label>菜品价格：</label><input :class="{showInput:true}" type="text" v-model="this.price"  /><br>
@@ -68,33 +71,37 @@
           <label>菜品数量：</label><input :class="{showInput:true}" type="text" v-model="this.count" /><br>
           <label>菜品图片：</label><input :class="{showInput:true}" type="text" v-model="this.icon"  /><br>
           <label>菜品描述：</label><input :class="{showInput:true}" type="text" v-model="this.detail" /><br>
-          <button class="sure" @click="SureAlter">确定</button>
-<!--          <button class="close" @click="hidebg">取消</button>-->
+          <button class="editBut" @click="SureAlter" style="background-color: rgb(0,136,255)">确定</button>
+          <button class="editBut" @click="hidebg" style="background-color: rgb(244,108,108)">取消</button>
         </div>
       </div>
     </div>
-    
-    <div>
+
+<!--  这里是查询结果列表-->
+    <div >
     <table v-if="isShowSearchTable">
       <tr>
+        <th class="checkbox"><input type="checkbox"></th>
         <th>菜单编号</th>
         <th>菜品类别</th>
         <th>菜品名称</th>
         <th>菜品价格</th>
         <th>菜品数量</th>
         <th>菜品图片</th>
-        <th>菜品描述</th>
+<!--        <th>菜品描述</th>-->
         <th>操    作</th>
       </tr>
       <tr v-for="(food,index) in searchBack " :key="food.id">
+        <td class="checkbox"><input type="checkbox" v-model="food.checked"></td>
         <td><input type="checkbox"> {{ food.menu_Id }}</td>
         <td> {{ food.menu_Form }}</td>
         <td> {{ food.menu_Name }}</td>
         <td> {{ food.menu_Price }}</td>
         <td> {{food.menu_Count }}</td>
         <td> {{ food.menu_Icon }}</td>
-        <td> {{ food.menu_detail }}</td>
-        <td > <button  class="delete" @click="deleteMenu(food.menu_Id)">删除</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button  @click="AlterInterfaceShow(index)"  class="alter">修改</button></td>
+<!--        <td> {{ food.menu_detail }}</td>-->
+        <td > <button  class="delete" @click="deleteMenu(food.menu_Id)" style="background-color: rgb(244,108,108)"><i class="fa fa-trash-o"></i>删除</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <button  @click="AlterInterfaceShow(index)"  class="alter" style="background-color: rgb(0,136,255)"><i class=" fa fa-pencil"></i> 修改</button></td>
       </tr>
     </table>
   </div>
@@ -102,22 +109,27 @@
 
   <!--      这里是新增界面      -->
   <!--    class="showAlterAdd"-->
-  <div class="bg" v-if="addshowBg.bg">
-    <button class="close" @click="addhidebg">X</button>
-    <input :class="{showInput:true}" type="text" v-model="this.Id" name="id" placeholder="菜品编号"/>
-    <input :class="{showInput:true}" type="text" v-model="this.Name" name="name" placeholder="菜品名称"/>
-    <input :class="{showInput:true}" type="text" v-model="this.Price"  placeholder="菜品价格"/>
-    <select :class="{showInput:true} " v-model="this.Form">
-      <option selected>好吃家常</option>
-      <option>营养套餐</option>
-      <option>请客大宴</option>
-      <option>美味小吃</option>
-    </select>
-    <input :class="{showInput:true}" type="text" v-model="this.Count" placeholder="数量"/>
-    <input :class="{showInput:true}" type="text" v-model="this.Icon"  placeholder="上传图片"/>
-    <input :class="{showInput:true}" type="text" v-model="this.Detail" placeholder="详细描述"/>
-    <button class="sure" @click="SureAdd">确定</button>
-
+  <div class="adddialog" v-if="addshowBg.bg">
+    <div class="editBox">
+      <div class="edit">
+<!--        <button class="close" @click="addhidebg" >X</button>-->
+        <label>菜品编号：</label><input :class="{showInput:true}" type="text" v-model="this.Id" name="id" placeholder="菜品编号"/>
+        <label>菜品名称：</label><input :class="{showInput:true}" type="text" v-model="this.Name" name="name" placeholder="菜品名称"/>
+        <label>菜品价格：</label><input :class="{showInput:true}" type="text" v-model="this.Price"  placeholder="菜品价格"/>
+        <label>菜品类别：</label>
+        <select :class="{showInput:true} " v-model="this.Form">
+          <option selected>好吃家常</option>
+          <option>营养套餐</option>
+          <option>请客大宴</option>
+          <option>美味小吃</option>
+        </select><br>
+        <label>菜品数量：</label><input :class="{showInput:true}" type="text" v-model="this.Count" placeholder="数量"/><br>
+        <label>菜品图片：</label><input :class="{showInput:true}" type="text" v-model="this.Icon"  placeholder="上传图片"/><br>
+<!--        <input :class="{showInput:true}" type="text" v-model="this.Detail" placeholder="详细描述"/><br>-->
+        <button class="editBut" @click="SureAdd" style="background-color: rgb(0,136,255)">确定</button>
+        <button class="editBut" @click="addhidebg" style="background-color: rgb(244,108,108)">取消</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -136,6 +148,7 @@ export default {
       searchList: '',
       searchBack: [],
       isShowSearchTable: false,
+      isShowPage:true,/*上下页不显示*/
       //背景显示
       showBg: {
         bg: false,
@@ -223,20 +236,26 @@ export default {
           let Detail=this.detail
       console.log(Id,Name,Price,Form,Count,Icon,Detail)
       //进行别名转换
-      if(Form==this.FoodMenu[0].menu_Name){
-        Form=1
-      }else if(Form==this.FoodMenu[1].menu_Name){
-        Form=2
-      }else if(Form==this.FoodMenu[2].menu_Name){
-        Form=3
-      }else if(Form==this.FoodMenu[3].menu_Name){
-        Form=4
-      } else if(Form==this.FoodMenu[4].menu_Name){
-        Form=5
-      } else if(Form==this.FoodMenu[5].menu_Name){
-        Form=6
+      // if(Form==this.FoodMenu[0].menu_Name){
+      //   Form=1
+      // }else if(Form==this.FoodMenu[1].menu_Name){
+      //   Form=2
+      // }else if(Form==this.FoodMenu[2].menu_Name){
+      //   Form=3
+      // }else if(Form==this.FoodMenu[3].menu_Name){
+      //   Form=4
+      // } else if(Form==this.FoodMenu[4].menu_Name){
+      //   Form=5
+      // } else if(Form==this.FoodMenu[5].menu_Name){
+      //   Form=6
+      // }
+      // console.log(Id,Name,Price,Form,Count,Icon,Detail)
+
+      //复制得到的地址校正
+      for ( let i= 0; i < Icon.length; i++)
+      {Icon=Icon.replace("\\","/")
+        Icon=Icon.replace("\"","")
       }
-      console.log(Id,Name,Price,Form,Count,Icon,Detail)
       this.$api.foodmenu.alterMenuInformation("/alterMenuInformation",{'Id':Id,'Form':Form,'Name':Name,'Price':Price,'Count':Count,'Icon':Icon,'Detail':Detail})
 
       this.hidebg()
@@ -250,7 +269,8 @@ export default {
             if (res==0){
               alert("删除失败")
             }else {
-              alert("确定要删除吗");
+              alert("删除成功")
+
               location.reload();
             //  重新加载
             }
@@ -308,6 +328,7 @@ export default {
               this.searchBack = res;
               console.log(res)
               this.isShowSearchTable = true;
+              this.isShowPage=false   //查询道结果之后，上下页隐藏
               // console.log(this.searchBack);
             }})
     },
@@ -321,112 +342,120 @@ export default {
 </script>
 
 <style scoped>
-
+#search{
+  margin-left: 10px;
+  border-radius: 0.5em; /*圆角边框弧度*/
+  text-align: center;
+  border-width: 1px ;
+  height: 25px;
+  width: 200px;
+}
+.table{
+  margin-top:10px;
+}
+/*复选框样式*/
+.checkbox {
+  width: 50px;
+}
 button {
   width: 50px;
   height: 30px;
   border-radius: 6px;
-  border-width: 1px;
+  border-width: 0px;
+  color: white;
 }
-table{
-  width: 95%;
-  margin-left: 2%;
-}
- th{
-  border-top: 2px solid #cccccc;
-  border-bottom: 1px solid #cccccc;
+
+/*表格单元格样式*/
+table, th{
+  border: 1px solid #cccccc; /*表格边框*/
   border-collapse: collapse;
   text-align: center;
   font-size: 16px;
   margin-top: 15px;
   margin-left: 10px;
+  /*height: 40px;*/
 
 }
 /*表格间隔条纹样式*/
 tr:nth-child(even) {
   background-color: #f2f2f2;
 }
+tr{  /*第一行，标题行高*/
+  height: 45px;
+}
 
-  tr{  /*表格行宽*/
-    height: 35px;
-  }
-  td {
-    border: 1px solid #cccccc;
-    font-size: 14px;
-    width: 145px;
-    height: 10px;
-  }
+td{
+  border: 1px solid #cccccc;
+  font-size: 14px;
+  width: 145px;
+}
 
-    div>button{
-      position:relative;
-      left: 40%;
+/*遮罩层样式*/
+.adddialog,.editdialog {
+  display: block;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 22;
+}
 
-      background-color: #3260f6;
-      padding: 5px;
-      color: #ffffff;
-      font-size: 15px;
-    }
-    input{
-      position: relative;
-      left: 38%;
+/*让编辑框居中*/
+.editBox {
+  display: block;
+  width: 500px;
+  height: 450px;
+  border-radius: 10px;
+  background-color:rgb(255,255,255);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin-top: 50px;
+}
 
-    }
-    /****************新增与修改界面****************/
-    .bg,.editBox{
-      position: absolute;
-      top: 25%;
-      left: 40%;
-      width: 30%;
-      height: 62%;
-      background: rgba(0, 0, 0,0.5);
-      border-radius: 10px;
-      display: block;
-    }
-    .showInput{
-      position: relative;
-      top: 30px;
-      left: 10%;
-      width: 250px;
-      height: 30px;
-      margin: 8px;
-      float: left;
-      border: 1px solid #249be5;
-      border-radius: 10px;
-    }
-  .edit>label{
-    position: relative;
-    top: 30px;
-    left: 5%;
-    color: white;
-    margin: 8px;
-    float: left;
-  }
-    .sure{
-      position: relative;
-      top: 60px;
-      left: 40%;
-      width: 100px;
-      border: 1px solid #249be5;
-      border-radius: 10px;
-    }
-    .close{
-      position: relative;
-      top: 8px;
-      left: 20%;
-      width: 40px;
-      border: 1px solid #54ade8;
-      background-color: #110707;
-      border-radius: 10px;
-    }
-    /**************************/
-    .alter,.delete{
-      position:relative;
-      left: 30%;
-    }
+label {  /*编辑框label样式*/
+  display: inline-block;
+  width: 80px;
+  text-align: right;
+  margin-right: 15px;
+  margin-top: 25px;
+  font-size: 16px;
+  font-family:"Arial Narrow";
+}
+
+.edit { /*编辑框内容居中*/
+  margin-left: 60px;
+
+}
+
+.edit>input {  /*输入框样式*/
+  border-radius: 0.5em; /*圆角边框弧度*/
+  text-align: center;
+  border-width: 1px ;
+  height: 25px;
+  width: 250px;
+}
+
+select { /*下拉选择框*/
+  border-radius: 0.5em; /*圆角边框弧度*/
+  height: 25px;
+  width: 250px;
+  text-align: center;
+}
+.editBut{/*确认和取消按钮样式*/
+  margin-top: 40px;
+  margin-left: 100px;
+  font-size: 16px;
+}
+
 /**************************/
 #page{ /*上下页框的位置*/
   position: absolute;
   left: 50%;
+  margin-top: 50px;
 }
 .pagination{ /*上下页的格式*/
   list-style: none;

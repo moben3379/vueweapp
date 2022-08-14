@@ -14,7 +14,7 @@
           <th>手机号码</th>
           <th>部门</th>
           <th>角色</th>
-          <th>操作</th>
+          <th>操  作</th>
         </tr>
         <tr v-for="(list,index) in UserList" :key="list.id">
           <td class="checkbox"><input type="checkbox" v-model="list.checked"></td>
@@ -159,15 +159,14 @@ export default {
 
 
     //获取用户列表
-   /* getUserList() {
+    getUserList() {
       this.$api.user.findUserList("user/findUserList")
           .then(res => {
             this.UserList = res
             console.log("用户列表", res);
-            /!*this.$store.commit('setList',this.UserList);*!/
+            /*this.$store.commit('setList',this.UserList);*/
           })
     },
-*/
     //新增用户
     insertUser() {
       console.log("新增的用户：", this.UserList)
@@ -235,10 +234,11 @@ export default {
 </script>
 
 <style scoped>
-#buttons {
-  margin: 10px 0 0 10px;
-}
 
+#buttons{
+  margin-top: 10px;
+  margin-left: 10px;
+}
 button {
   width: 50px;
   height: 30px;
@@ -263,17 +263,15 @@ tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-tr{  /*表格行宽*/
+tr{  /*第一行，标题行高*/
   height: 45px;
 }
 td {
   border: 1px solid #cccccc;
   font-size: 14px;
   width: 145px;
-  height: 30px;
+
 }
-
-
 
 .checkbox {
   width: 50px;

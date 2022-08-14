@@ -91,6 +91,7 @@ li {
   border-width: 0px 0 0;
   border-color: #E5E5E5;
   margin-top: 15px;
+  font-size: 18px;
 }
 
 .submenu > li {
@@ -99,13 +100,12 @@ li {
 }
 
 a {
-  display: block;
   width: 189px;
   height: 36px;
   color: #5d5d5d;
   text-decoration: none;
   line-height: 36px;
-  font-size: 18px;
+  /*font-size: 100%;*/
   color: rgb(242,242,242);
 }
 
@@ -124,6 +124,7 @@ a {
 
 .submenu:before {
   content: "";
+  color: white;
   display: block;
   position: absolute;
   z-index: 1;
@@ -136,6 +137,7 @@ a {
 
 .submenu > li:before {
   content: "";
+  color: white;  /*展开的时候线的颜色*/
   display: block;
   width: 10px;
   position: absolute;

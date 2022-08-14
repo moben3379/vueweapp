@@ -2,15 +2,14 @@
 
 <div>
   <input type="text" id="search" placeholder="查询订单" v-model="searchList">
-  <button @click="searchOrderList()">查询订单</button>
-  <button v-if="isShowSearchTable" @click="returnInitPage()">返回</button>
+  <button @click="searchOrderList()" style="background-color: #FFD664"><i class="fa fa-search"></i>查询</button>
+  <button v-if="isShowSearchTable" @click="returnInitPage()" style="background-color: #cccccc">返回</button>
 </div>
 
 
 <table v-if="!isShowSearchTable">
-  <caption>订单列表</caption>
   <tr>
-    <th><input type="checkbox"></th>
+    <th class="checkbox"><input type="checkbox"></th>
     <th style="width: 120px">买家ID</th>
     <th style="width: 80px">买家昵称</th>
     <th style="width: 120px">电话</th>
@@ -22,8 +21,10 @@
     <th style="width: 80px">订单状态</th>
     <th style="width: 150px;border:1px;">操作</th>
   </tr>
-  <tr v-for="(order,index) in OrderList" :key="order.id">
-    <td><input type="checkbox"></td>
+
+  <tr v-for="(order,index) in newdata" :key="order.id">
+    <td class="checkbox"><input type="checkbox"></td>
+
     <td>{{order.buyer_openid}}</td>
     <td>{{order.buyer_name}}</td>
     <td>{{order.buyer_phone}}</td>
@@ -34,17 +35,19 @@
     <td>{{getTotalPrice(index)}}</td>
     <td v-if="order.order_status==0">未处理</td>
     <td v-if="order.order_status==1">已处理</td>
-    <td style="border:1px;">
-      <a href="#" @click.prevent="cheangeOrderStatus(index)" v-if="order.order_status==0">已完成订单</a>
-      <a href="#" v-if="order.order_status==1" @click.prevent="deleteOrder(order.order_id)">删除</a>
+    <td>
+      <button href="#" @click.prevent="cheangeOrderStatus(index)" v-if="order.order_status==0" style="background-color: rgb(41,154,57);width: 70px">已完成订单</button>
+      <button href="#" v-if="order.order_status==1" @click.prevent="deleteOrder(order.order_id)" style="background-color: rgb(244,108,108)"><i class="fa fa-trash-o"></i>删除</button>
       &nbsp;
-      <a href="#" @click.prevent="cheangeOrderStatus(index)" v-if="order.order_status==1">撤回</a>
+      <button href="#" @click.prevent="cheangeOrderStatus(index)" v-if="order.order_status==1" style="background-color: rgb(0,136,255)"><i class=" fa fa-undo"></i>撤回</button>
     </td>
   </tr>
 </table>
 
+
+<!--  这里是查询结果页面-->
   <table v-if="isShowSearchTable">
-    <caption>订单列表</caption>
+
     <tr>
       <th><input type="checkbox"></th>
       <th style="width: 120px">买家ID</th>
@@ -71,10 +74,10 @@
       <td v-if="searchOrder.order_status==0">未处理</td>
       <td v-if="searchOrder.order_status==1">已处理</td>
       <td style="border:1px;">
-        <a href="#" @click.prevent="cheangeOrderStatus(index)" v-if="searchOrder.order_status==0">已完成订单</a>
-        <a href="#" v-if="searchOrder.order_status==1" @click.prevent="deleteOrder(searchOrder.order_id)">删除</a>
+        <button href="#" @click.prevent="cheangeOrderStatus(index)" v-if="searchOrder.order_status==0" style="background-color: rgb(41,154,57);width: 70px">已完成订单</button>
+        <button href="#" v-if="searchOrder.order_status==1" @click.prevent="deleteOrder(searchOrder.order_id)" style="background-color: rgb(244,108,108)"><i class="fa fa-trash-o"></i>删除</button>
         &nbsp;
-        <a href="#" @click.prevent="cheangeOrderStatus(index)" v-if="searchOrder.order_status==1">撤回</a>
+        <button href="#" @click.prevent="cheangeOrderStatus(index)" v-if="searchOrder.order_status==1" style="background-color: rgb(0,136,255)"><i class=" fa fa-undo"></i>撤回</button>
       </td>
     </tr>
   </table>
@@ -82,15 +85,16 @@
   <div id="page">
     <ul class="pagination">
       <li>第{{pageNum}}页</li>
-      <li><button @click="getpagedata(pageNum-1)">上一页</button></li>
+      <li><button @click="getpagedata(pageNum-1)" style="background-color: rgb(0,136,255)">上一页</button></li>
       <li v-for="m in addpage()" :key="m"><a href="#" @click="getpagedata(m)">[{{m}}]</a></li>
-      <li><button @click="getpagedata(pageNum+1)">下一页</button></li>
+      <li><button @click="getpagedata(pageNum+1)" style="background-color: rgb(0,136,255)">下一页</button></li>
     </ul>
   </div>
 
 </template>
 
 <script>
+
 
 export default {
   name: "OrderList",
@@ -172,7 +176,7 @@ export default {
     },
     deleteOrder(id){
       console.log(id)
-      this.$api.orderList.deleteOrderByOrderId("/deleteOrderByOrderId",id)
+      this.$api.deleteOrderByOrderId("/deleteOrderByOrderId",id)
       .then(res=>{
         if (res==0){
           alert("删除失败")
@@ -191,25 +195,50 @@ export default {
 </script>
 
 <style scoped>
-table,th,td{
-  margin: auto;
-  align-content: center;
+#search{
+  margin-left: 10px;
+  border-radius: 0.5em; /*圆角边框弧度*/
   text-align: center;
+  border-width: 1px ;
+  height: 25px;
+  width: 200px;
 }
-a{
-  text-decoration: none;
-  color: black;
+button {
+  width: 50px;
+  height: 30px;
+  border-radius: 6px;
+  border-width: 0px;
+  color: white;
 }
-table{
-  table-layout: fixed;
+
+/*表格单元格样式*/
+table, th{
+  border: 1px solid #cccccc; /*表格边框*/
   border-collapse: collapse;
-  border:1px solid;
+  text-align: center;
+  font-size: 16px;
+  margin-top: 15px;
+  margin-left: 10px;
+  /*height: 40px;*/
+
 }
-tr{
-  border:1px solid;
+/*表格间隔条纹样式*/
+tr:nth-child(even) {
+  background-color: #f2f2f2;
 }
-td{
-  border:0px;
+
+tr{  /*第一行，标题行高*/
+  height: 45px;
+}
+td {
+  border: 1px solid #cccccc;
+  font-size: 14px;
+  width: 145px;
+
+}
+
+.checkbox {
+  width: 50px;
 }
 #page{ /*上下页框的位置*/
   position: absolute;

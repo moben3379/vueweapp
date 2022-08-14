@@ -21,8 +21,10 @@
     <th style="width: 80px">订单状态</th>
     <th style="width: 150px;border:1px;">操作</th>
   </tr>
+
   <tr v-for="(order,index) in newdata" :key="order.id">
     <td class="checkbox"><input type="checkbox"></td>
+
     <td>{{order.buyer_openid}}</td>
     <td>{{order.buyer_name}}</td>
     <td>{{order.buyer_phone}}</td>
@@ -147,9 +149,7 @@ export default {
           })
     },
 
-
     /*订单查询*/
-
     searchOrderList() {
       this.$api.searchOrderList("/searchOrderList", this.searchList)
           .then(res => {
@@ -173,8 +173,6 @@ export default {
       }else {
         this.OrderList[index].order_status=0;
       }
-
-
     },
     deleteOrder(id){
       console.log(id)

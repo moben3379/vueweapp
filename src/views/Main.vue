@@ -14,8 +14,13 @@ export default {
 
   name: "MainPage",
   computed:{
+  },
+  created() {
+    console.log("创建后")
+  },
+  beforeCreate() {
+    console.log("创建前")
   }
-
 }
 </script>
 

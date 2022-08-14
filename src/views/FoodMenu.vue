@@ -7,6 +7,7 @@
       <button  @click="addMenuInformation" style="background-color: rgb(41,154,57)"><i class="fa fa-plus " ></i> 新增</button>
     </div>
 
+
     <div class="table">
       <table v-if="!isShowSearchTable">
         <tr>
@@ -28,7 +29,6 @@
           <td> {{ food.menu_Price }}</td>
           <td> {{food.menu_Count }}</td>
           <td> {{ food.menu_Icon }}</td>
-          <!--        <td> {{ food.menu_detail }}</td>-->
           <td>
             <button @click="deleteMenu(food.menu_Id)"  style="background-color: rgb(244,108,108)"><i class="fa fa-trash-o"></i>删除</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -37,6 +37,7 @@
         </tr>
       </table>
     </div>
+
 
     <div id="pageTop"></div>
     <div id="page" v-if="isShowPage">
@@ -136,6 +137,8 @@
 <script>
 
 
+
+import {findMenuInformation} from "@/http/modules/foodmenu";
 
 export default {
 
